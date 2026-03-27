@@ -204,6 +204,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#f0f2f5;min-height:1
     <button class="ast-btn active" id="ast-agenda" onclick="showAdminTab('agenda')">📅 Agenda</button>
     <button class="ast-btn" id="ast-itens" onclick="showAdminTab('itens')">📋 Itens</button>
     <button class="ast-btn" id="ast-config" onclick="showAdminTab('config')">💬 WhatsApp</button>
+    <button class="ast-btn" style="margin-left:auto" title="Recarregar mudanças" onclick="renderAdmin();alert('✅ Dados atualizados!')">🔄 Recarregar</button>
   </div>
   <div class="admin-content open" id="admin-agenda"></div>
   <div class="admin-content" id="admin-itens"></div>
@@ -238,7 +239,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#f0f2f5;min-height:1
 <div class="bottom-bar" id="bottomBar">
   <button class="btn-reset" onclick="resetDay()" title="Limpar dia">🔄</button>
   <button class="btn-reset" id="sharePhotosBtn" onclick="sharePhotos()" title="Compartilhar fotos" style="display:none">📤 Fotos</button>
-  <button class="btn-wa" onclick="checarEEnviarWhatsapp()">
+  <button class="btn-wa" onclick="sendWhatsappComFotos()">
     <svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
     Relatório
   </button>
@@ -459,7 +460,7 @@ function renderSection(sec,items){
     if(item.type==='temperature'){
       const tempVal=st.temp||'';
       const noteVal=st.note||'';
-      html+=`<div class="temp-row" onclick="stopProp(event)"><label>🌡️ Temp:</label><input class="temp-input" type="number" step="0.1" placeholder="ex: 4.0" value="${esc(tempVal)}" oninput="saveState()"><span class="temp-unit">°C</span><textarea class="temp-note" placeholder="Obs (opcional)" oninput="saveState()">${esc(noteVal)}</textarea></div>`;
+      html+=`<div class="temp-row" onclick="stopProp(event)"><label>🌡️ Temp:</label><input class="temp-input" type="number" step="0.1" placeholder="ex: 4.0" value="${esc(tempVal)}" oninput="saveState();validarTemperatura(this)" onchange="validarTemperatura(this)"><span class="temp-unit">°C</span><textarea class="temp-note" placeholder="Obs (opcional)" oninput="saveState()">${esc(noteVal)}</textarea></div>`;
     }
     html+=`</div></div>`;
   });
@@ -586,7 +587,8 @@ function renderItemEditor(){
   const items=getItems();
   const tabColors={abertura:'tag-abertura',mep:'tag-mep',operacao:'tag-operacao',fechamento:'tag-fechamento'};
   const tabNames={abertura:'Abertura',mep:'MEP',operacao:'Operação',fechamento:'Fechamento'};
-  let html=`<div class="add-sec-card"><h4>➕ Nova Seção</h4><div class="add-sec-form"><div class="add-sec-row"><input type="text" id="newSecIcon" placeholder="Ícone" style="max-width:80px"><input type="text" id="newSecName" placeholder="Nome"></div><div class="add-sec-row"><select id="newSecTab"><option>Abertura</option><option>MEP</option><option>Operação</option><option>Fechamento</option></select></div><button class="btn-add-sec" onclick="addSection()">Criar</button></div></div>`;
+  let html=`<div class="add-sec-card"><h4>🔍 Buscar Itens</h4><div class="add-sec-form"><input type="text" id="searchInput" placeholder="Digite para buscar..." oninput="searchItems()" style="padding:8px;border:1px solid #ddd;border-radius:6px;width:100%;color:#000"></div></div>`;
+  html+=`<div class="add-sec-card"><h4>➕ Nova Seção</h4><div class="add-sec-form"><div class="add-sec-row"><input type="text" id="newSecIcon" placeholder="Ícone" style="max-width:80px"><input type="text" id="newSecName" placeholder="Nome"></div><div class="add-sec-row"><select id="newSecTab"><option>Abertura</option><option>MEP</option><option>Operação</option><option>Fechamento</option></select></div><button class="btn-add-sec" onclick="addSection()">Criar</button></div></div>`;
   sections.sort((a,b)=>a.order-b.order).forEach(sec=>{
     const secItems=items.filter(i=>i.sec===sec.id).sort((a,b)=>a.order-b.order);
     const tagClass=tabColors[sec.tab]||'';
@@ -840,6 +842,162 @@ function loadPhoneNumber(){
   const cfg=getWhatsappConfig();
   document.getElementById('waPhone').value=cfg.phone||'';
   document.getElementById('waGroup').value=cfg.groupName||'';
+}
+
+// ══════════════════════════════════════════════
+// SINCRONIZAÇÃO EM TEMPO REAL
+// ══════════════════════════════════════════════
+window.addEventListener('storage',e=>{
+  if(e.key&&(e.key.startsWith('pq_'))){
+    if(currentTab==='admin')renderAdmin();
+    else renderAllPanels();
+    updateProgress();
+  }
+});
+
+// ══════════════════════════════════════════════
+// COMPRESSÃO DE IMAGENS
+// ══════════════════════════════════════════════
+function comprimirImagem(base64,callback){
+  const img=new Image();
+  img.src=base64;
+  img.onload=()=>{
+    const canvas=document.createElement('canvas');
+    let w=img.width,h=img.height;
+    if(w>h){if(w>800){h=Math.round(h*800/w);w=800}}
+    else{if(h>800){w=Math.round(w*800/h);h=800}}
+    canvas.width=w;
+    canvas.height=h;
+    const ctx=canvas.getContext('2d');
+    ctx.drawImage(img,0,0,w,h);
+    callback(canvas.toDataURL('image/jpeg',0.7));
+  };
+}
+
+function comprimirPhotos(photosArray,callback){
+  let processed=0;
+  const compressed=[];
+  photosArray.forEach((foto,idx)=>{
+    comprimirImagem(foto,resultado=>{
+      compressed[idx]=resultado;
+      processed++;
+      if(processed===photosArray.length)callback(compressed);
+    });
+  });
+}
+
+// ══════════════════════════════════════════════
+// RELATÓRIO COM FOTOS
+// ══════════════════════════════════════════════
+function sendWhatsappComFotos(){
+  const cfg=getWhatsappConfig();
+  if(!cfg.phone||cfg.phone.trim()===''){
+    if(confirm('⚠️ Número de WhatsApp não configurado.\n\nVocê deseja configurar agora?')){
+      showTab('admin');
+      showAdminTab('config');
+      document.getElementById('waPhone').focus();
+    }
+    return;
+  }
+
+  if(photos.length===0){
+    sendWhatsapp();
+    return;
+  }
+
+  comprimirPhotos(photos,compressed=>{
+    saveState();
+    const resp=document.getElementById('resp').value.trim()||'Não informado';
+    const sections=getSections();
+    const items=getItems();
+    const schedule=getSchedule();
+    const dow=new Date(currentDate+'T12:00:00').getDay();
+    const activeSecs=schedule[dow]||[];
+
+    let msg=`🔥 *CHECKLIST PRAÇA QUENTE*\n`;
+    msg+=`━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+    msg+=`👤 *Responsável:* ${resp}\n`;
+    msg+=`📅 *Data:* ${fmtDate(currentDate)}\n`;
+    msg+=`📸 *Fotos:* ${compressed.length}\n`;
+    msg+=`━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+
+    let overallOk=true;
+    TABS.forEach(tab=>{
+      const tabSecs=sections.filter(s=>s.tab===tab&&activeSecs.includes(s.id));
+      const tabItems=items.filter(i=>tabSecs.some(s=>s.id===i.sec));
+      if(tabItems.length===0)return;
+
+      const done=tabItems.filter(i=>dayState.checks[i.id]?.checked).length;
+      const total=tabItems.length;
+      const pct=Math.round(done/total*100);
+      const status=done===total?'✅':done===0?'❌':'⚠️';
+      if(done<total)overallOk=false;
+
+      msg+=`${status} *${tab.toUpperCase()}* (${done}/${total} - ${pct}%)\n`;
+      msg+=`${'═'.repeat(30)}\n`;
+
+      tabItems.forEach(item=>{
+        const isChecked=dayState.checks[item.id]?.checked;
+        const icon=isChecked?'✅':'❌';
+        const st=dayState.checks[item.id]||{};
+        msg+=`${icon} ${item.text}`;
+        if(isChecked&&item.type==='temperature'&&st.temp){
+          msg+=` 🌡️ ${st.temp}°C`;
+          if(st.note)msg+=` (${st.note})`;
+        }
+        msg+='\n';
+      });
+
+      const obs=dayState.obs[tab];
+      if(obs&&obs.trim()){
+        msg+=`\n📌 *Obs:* ${obs.trim()}\n`;
+      }
+      msg+='\n';
+    });
+
+    msg+=`━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+    msg+=overallOk?'🏆 *TURNO 100% CONCLUÍDO!*':'⚠️ *ATENÇÃO: HÁ ITENS PENDENTES*';
+
+    msg+=`\n\n📸 *FOTOS ANEXADAS:*\n`;
+    compressed.forEach((foto,i)=>{
+      msg+=`Foto ${i+1}: ${foto.substring(0,50)}...\n`;
+    });
+
+    const phone=cfg.phone.trim();
+    const url=`https://wa.me/${phone}?text=`;
+    window.open(url+encodeURIComponent(msg),'_blank');
+  });
+}
+
+// ══════════════════════════════════════════════
+// VALIDAÇÃO DE TEMPERATURA
+// ══════════════════════════════════════════════
+function validarTemperatura(input){
+  const val=parseFloat(input.value);
+  if(isNaN(val)||val<=0){
+    input.style.borderColor='#e0b0ae';
+    input.style.backgroundColor='#fff9f9';
+    return;
+  }
+  if(val>8){
+    input.style.borderColor='#e74c3c';
+    input.style.backgroundColor='#ffe0e0';
+  }else{
+    input.style.borderColor='#c0392b';
+    input.style.backgroundColor='#fff9f9';
+  }
+}
+
+// ══════════════════════════════════════════════
+// BUSCADOR DE ITENS NO ADMIN
+// ══════════════════════════════════════════════
+function searchItems(){
+  const query=document.getElementById('searchInput').value.toLowerCase();
+  const items=document.querySelectorAll('.edit-item-row');
+  items.forEach(item=>{
+    const text=item.textContent.toLowerCase();
+    item.style.display=text.includes(query)?'flex':'none';
+  });
 }
 </script>
 </body>
