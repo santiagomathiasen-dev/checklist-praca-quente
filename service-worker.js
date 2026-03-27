@@ -82,4 +82,27 @@ self.addEventListener('sync', event => {
     // Placeholder for future photo sync
   }
 });
- 
+ // Linha 347: SENHA ADMIN
+const ADMIN_PASSWORD = '37014520';
+
+// Linhas 349-354: Abre o modal de senha
+function requestAdminPassword(){
+  document.getElementById('passwordInput').value='';
+  document.getElementById('passwordError').style.display='none';
+  document.getElementById('passwordOverlay').classList.add('open');
+  document.getElementById('passwordInput').focus();
+}
+
+// Linhas 356-367: Valida a senha
+function verifyPassword(){
+  const pwd = document.getElementById('passwordInput').value;
+  if(pwd === ADMIN_PASSWORD){
+    closePasswordModal();
+    showTab('admin');
+    renderAdmin();
+  } else {
+    document.getElementById('passwordError').style.display='block';
+    document.getElementById('passwordInput').value='';
+    document.getElementById('passwordInput').focus();
+  }
+}
