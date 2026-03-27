@@ -1,963 +1,585 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<meta name="description" content="Checklist operacional Praça Quente">
-<meta name="theme-color" content="#c0392b">
-<link rel="manifest" href="data:application/manifest+json,{%22name%22:%22Checklist%20Pra%C3%A7a%20Quente%22,%22short_name%22:%22Pra%C3%A7a%20Quente%22,%22description%22:%22Checklist%20operacional%20da%20cozinha%20quente%22,%22start_url%22:%22/%22,%22display%22:%22standalone%22,%22background_color%22:%22%23ffffff%22,%22theme_color%22:%22%23c0392b%22,%22orientation%22:%22portrait-primary%22,%22icons%22:[{%22src%22:%22data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%270%200%20192%20192%27%3E%3Crect%20fill=%27%23c0392b%27%20width=%27192%27%20height=%27192%27/%3E%3Ctext%20x=%2750%25%27%20y=%2750%25%27%20font-size=%27120%27%20fill=%27white%27%20text-anchor=%27middle%27%20dominant-baseline=%27middle%27%3E🔥%3C/text%3E%3C/svg%3E%22,%22sizes%22:%22192x192%22,%22type%22:%22image/svg+xml%22,%22purpose%22:%22any%22},%7B%22src%22:%22data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%270%200%20512%20512%27%3E%3Crect%20fill=%27%23c0392b%27%20width=%27512%27%20height=%27512%27/%3E%3Ctext%20x=%2750%25%27%20y=%2750%25%27%20font-size=%27350%27%20fill=%27white%27%20text-anchor=%27middle%27%20dominant-baseline=%27middle%27%3E🔥%3C/text%3E%3C/svg%3E%22,%22sizes%22:%22512x512%22,%22type%22:%22image/svg+xml%22,%22purpose%22:%22any%22}],%22categories%22:[%22productivity%22]}">
-<link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%23c0392b' width='180' height='180'/><text x='50%' y='50%' font-size='100' fill='white' text-anchor='middle' dominant-baseline='middle'>🔥</text></svg>">
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%23c0392b' width='180' height='180'/><text x='50%' y='50%' font-size='100' fill='white' text-anchor='middle' dominant-baseline='middle'>🔥</text></svg>">
-<title>Checklist Praça Quente</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:#f0f2f5;min-height:100vh;color:#1a1a2e}
-.header{background:linear-gradient(135deg,#c0392b,#922b21);color:white;padding:14px 14px 10px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.28)}
-.header h1{font-size:1.2rem;font-weight:700;letter-spacing:.3px;display:flex;align-items:center;justify-content:space-between}
-.hdr-btn{background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.3);color:white;border-radius:8px;padding:6px 10px;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .2s}
-.hdr-btn:active{background:rgba(255,255,255,.3)}
-.hdr-sub{font-size:.72rem;opacity:.78;margin:1px 0 9px}
-.hdr-fields{display:flex;gap:8px;margin-bottom:9px}
-.hdr-field{flex:1;display:flex;flex-direction:column;gap:3px}
-.hdr-field label{font-size:.63rem;opacity:.8;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:#000}
-.hdr-field input{border:1.5px solid rgba(255,255,255,.35);border-radius:7px;padding:6px 9px;font-size:.82rem;color:#000;background:rgba(255,255,255,.95);outline:none;width:100%}
-.hdr-field input::placeholder{color:#999}
-.hdr-field input:focus{border-color:rgba(255,255,255,.75);background:white}
-.hdr-field input[type=date]::-webkit-calendar-picker-indicator{filter:none;opacity:1;cursor:pointer}
-.prog-wrap{background:rgba(255,255,255,.22);border-radius:20px;height:7px;overflow:hidden;margin-bottom:3px}
-.prog-bar{height:100%;background:#f9e79f;border-radius:20px;transition:width .35s ease;width:0%}
-.prog-lbl{font-size:.68rem;opacity:.85}
-.tabs{display:flex;overflow-x:auto;background:white;border-bottom:2px solid #ebebeb;scrollbar-width:none;position:sticky;top:127px;z-index:90;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.tabs::-webkit-scrollbar{display:none}
-.tab-btn{flex:1;min-width:62px;padding:9px 4px 8px;font-size:.72rem;font-weight:600;color:#999;border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:2px}
-.tab-btn.active{color:#c0392b;border-bottom-color:#c0392b}
-.tbadge{background:#eee;color:#888;font-size:.58rem;border-radius:10px;padding:1px 5px;transition:all .2s}
-.tab-btn.active .tbadge{background:#fde8e6;color:#c0392b}
-.tab-btn.admin-tab{color:#888}
-.tab-btn.admin-tab.active{color:#555;border-bottom-color:#555}
-.panel{display:none;padding:10px 12px}
-.panel.active{display:block}
-.section{background:white;border-radius:11px;margin-bottom:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.sec-hdr{padding:11px 13px;font-size:.76rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;user-select:none;background:#fafafa;border-bottom:1px solid #f0f0f0}
-.sec-hdr .sc{font-size:.67rem;color:#aaa;font-weight:500;text-transform:none;display:flex;align-items:center;gap:4px}
-.sec-hdr .chev{font-size:.6rem;color:#ccc;transition:transform .2s}
-.sec-hdr.collapsed .chev{transform:rotate(-90deg)}
-.item-list{padding:3px 0}
-.item-list.hidden{display:none}
-.item{display:flex;align-items:flex-start;padding:10px 13px;border-bottom:1px solid #f7f7f7;gap:10px;cursor:pointer;transition:background .15s;-webkit-tap-highlight-color:transparent}
-.item:last-child{border-bottom:none}
-.item:active{background:#fdf5f4}
-.item input[type=checkbox]{display:none}
-.chk{width:22px;height:22px;min-width:22px;border:2px solid #ddd;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:all .2s;background:white;margin-top:1px}
-.item.checked .chk{background:#c0392b;border-color:#c0392b}
-.chk svg{display:none}
-.item.checked .chk svg{display:block}
-.item-body{flex:1;min-width:0}
-.item-text{font-size:.86rem;color:#000;line-height:1.35;transition:color .2s}
-.item.checked .item-text{color:#bbb;text-decoration:line-through}
-.temp-row{display:none;margin-top:6px;align-items:center;gap:7px;flex-wrap:wrap}
-.item.checked .temp-row{display:flex}
-.temp-row label{font-size:.7rem;color:#c0392b;font-weight:700;white-space:nowrap}
-.temp-input{border:1.5px solid #e0b0ae;border-radius:6px;padding:5px 9px;font-size:.83rem;width:100px;outline:none;transition:border-color .2s;background:#fff9f9}
-.temp-input:focus{border-color:#c0392b}
-.temp-unit{font-size:.75rem;color:#aaa}
-.temp-row textarea{border:1.5px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:.8rem;width:100%;resize:none;height:42px;outline:none;font-family:inherit;transition:border-color .2s;margin-top:2px}
-.temp-row textarea:focus{border-color:#c0392b}
-.obs-card{background:white;border-radius:11px;padding:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:10px}
-.obs-card label{font-size:.68rem;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:6px}
-.obs-card textarea{width:100%;border:1.5px solid #e8e8e8;border-radius:8px;padding:8px 10px;font-size:.83rem;font-family:inherit;resize:vertical;min-height:65px;color:#000;outline:none;transition:border-color .2s}
-.obs-card textarea:focus{border-color:#c0392b}
-.photos-card{background:white;border-radius:11px;padding:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:10px}
-.photos-label{font-size:.68rem;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.4px;display:flex;align-items:center;gap:6px;margin-bottom:8px}
-.photo-count{background:#fde8e6;color:#c0392b;border-radius:20px;padding:2px 8px;font-size:.62rem;font-weight:700}
-.photos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px}
-.photo-item{position:relative;border-radius:8px;overflow:hidden;background:#f5f5f5;aspect-ratio:1;cursor:pointer}
-.photo-item img{width:100%;height:100%;object-fit:cover}
-.photo-del{position:absolute;top:2px;right:2px;background:#e74c3c;color:white;border:none;border-radius:50%;width:22px;height:22px;font-size:.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.photo-del:active{opacity:.8}
-.photos-empty{text-align:center;color:#bbb;font-size:.8rem;padding:16px 12px}
-#photoInput{display:none}
-.all-done{display:none;background:#e8f8f5;color:#1e8449;border:1px solid #a9dfbf;border-radius:8px;padding:9px 13px;font-size:.8rem;font-weight:600;text-align:center;margin-bottom:10px}
-.rules-banner{background:#fef9e7;border-left:4px solid #f39c12;border-radius:0 8px 8px 0;padding:9px 12px;margin-bottom:10px;font-size:.76rem;line-height:1.55;color:#7d6608}
-.rules-banner strong{color:#b7770d}
-.empty-day{text-align:center;color:#bbb;padding:24px 12px;font-size:.85rem}
-.empty-day .ed-icon{font-size:2.5rem;margin-bottom:8px}
-.spacer{height:80px}
-.bottom-bar{position:fixed;bottom:0;left:0;right:0;display:flex;gap:8px;padding:8px;background:white;border-top:1px solid #e0e0e0;z-index:50;box-shadow:0 -2px 8px rgba(0,0,0,.1)}
-.btn-reset{flex:1;padding:10px;border:1px solid #ddd;background:white;border-radius:8px;font-size:.8rem;cursor:pointer;color:#666;transition:all .2s}
-.btn-reset:active{background:#f5f5f5}
-.btn-wa{flex:2;padding:10px;background:#25d366;color:white;border:none;border-radius:8px;font-size:.8rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .2s}
-.btn-wa:active{background:#1faa4b}
-.btn-wa svg{width:16px;height:16px}
-.admin-sub-tabs{display:flex;gap:4px;margin-bottom:12px;padding:8px;background:#f9f9f9;border-radius:8px;overflow-x:auto;scrollbar-width:none}
-.admin-sub-tabs::-webkit-scrollbar{display:none}
-.ast-btn{padding:7px 12px;border:1px solid #ddd;background:white;border-radius:6px;font-size:.75rem;font-weight:600;color:#666;cursor:pointer;white-space:nowrap;transition:all .2s}
-.ast-btn.active{background:#c0392b;color:white;border-color:#c0392b}
-.admin-content{display:none}
-.admin-content.open{display:block}
-.add-sec-card,.sec-ed-card{background:white;border-radius:11px;padding:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:10px}
-.add-sec-card h4,.sec-ed-card h4{font-size:.8rem;font-weight:700;color:#333;margin-bottom:10px}
-.add-sec-form{display:flex;flex-direction:column;gap:8px}
-.add-sec-row{display:flex;gap:8px}
-.add-sec-row input,.add-sec-row select{flex:1;padding:7px 9px;border:1.5px solid #ddd;border-radius:6px;font-size:.8rem;outline:none;transition:border-color .2s;color:#000}
-.add-sec-row input:focus,.add-sec-row select:focus{border-color:#c0392b}
-.btn-add-sec{padding:8px 12px;background:#27ae60;color:white;border:none;border-radius:6px;font-size:.8rem;font-weight:600;cursor:pointer;transition:background .2s}
-.btn-add-sec:active{background:#229954}
-.agenda-card{background:white;border-radius:11px;padding:12px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.agenda-card-title{font-size:.8rem;font-weight:700;color:#333;margin-bottom:10px}
-.day-row{display:flex;align-items:center;gap:10px;padding:8px;border-bottom:1px solid #f0f0f0}
-.day-row.today-row{background:#fef9e7}
-.day-name{font-size:.75rem;font-weight:600;color:#000;min-width:40px}
-.day-chips{display:flex;gap:6px;flex-wrap:wrap}
-.sec-chip{display:inline-block;padding:6px 10px;border-radius:6px;font-size:.72rem;cursor:pointer;transition:all .2s;border:1px solid #ddd;background:white;margin:3px;white-space:nowrap;font-weight:500}
-.sec-chip.on{background:#c0392b;color:white;border-color:#c0392b}
-.sec-chip.off{background:white;color:#666;border-color:#ddd}
-.sec-ed-hdr{display:flex;align-items:center;gap:8px;padding:10px;background:#f9f9f9;border-radius:8px;cursor:pointer;user-select:none;transition:background .2s}
-.sec-ed-hdr:active{background:#f0f0f0}
-.sec-ed-icon{font-size:1.1rem}
-.sec-ed-name{flex:1;font-size:.8rem;font-weight:600;color:#333}
-.sec-ed-tag{font-size:.65rem;padding:2px 6px;border-radius:4px;font-weight:600}
-.tag-abertura{background:#ffe0db;color:#c0392b}
-.tag-mep{background:#fff4e0;color:#f39c12}
-.tag-operacao{background:#e0f4ff;color:#3498db}
-.tag-fechamento{background:#f0e0ff;color:#8e44ad}
-.btn-del-sec{background:#e74c3c;color:white;border:none;padding:4px 6px;border-radius:4px;cursor:pointer;font-size:.7rem;transition:background .2s}
-.btn-del-sec:active{background:#c0392b}
-.sec-ed-chev{color:#999;transition:transform .2s;font-size:.7rem}
-.sec-ed-hdr.collapsed .sec-ed-chev{transform:rotate(-90deg)}
-.sec-ed-body{display:none;padding:10px 0;border-top:1px solid #f0f0f0;margin-top:8px}
-.sec-ed-body.open{display:block}
-.edit-item-row{display:flex;align-items:center;gap:8px;padding:7px;background:white;border-radius:6px;margin-bottom:6px;border:1px solid #f0f0f0;font-size:.78rem}
-.edit-item-text{flex:1;color:#333}
-.temp-badge{background:#fde8e6;color:#c0392b;padding:2px 5px;border-radius:4px;font-size:.65rem;font-weight:600}
-.btn-icon{background:none;border:none;cursor:pointer;font-size:.85rem;padding:4px;transition:opacity .2s}
-.btn-icon:active{opacity:.6}
-.add-item-area{padding-top:8px;border-top:1px solid #f0f0f0;margin-top:8px}
-.add-item-form{display:flex;gap:6px;margin-bottom:6px}
-.add-item-input{flex:1;padding:6px 8px;border:1px solid #ddd;border-radius:6px;font-size:.78rem;outline:none;transition:border-color .2s;color:#000}
-.add-item-input:focus{border-color:#c0392b}
-.btn-add-item{padding:6px 10px;background:#3498db;color:white;border:none;border-radius:6px;font-size:.75rem;font-weight:600;cursor:pointer;transition:background .2s}
-.btn-add-item:active{background:#2980b9}
-.add-item-opts{display:flex;align-items:center;gap:6px;font-size:.75rem;color:#666;cursor:pointer;user-select:none}
-.add-item-opts input[type=checkbox]{cursor:pointer}
-.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center}
-.modal-overlay.open{display:flex}
-.modal{background:white;border-radius:12px;padding:16px;max-width:320px;width:90%;box-shadow:0 4px 24px rgba(0,0,0,.3)}
-#modalTitle{font-size:.9rem;font-weight:700;color:#333;margin-bottom:12px}
-.modal-field{margin-bottom:12px}
-.modal-field label{display:block;font-size:.75rem;font-weight:600;color:#666;margin-bottom:4px}
-.modal-field input{width:100%;padding:8px 10px;border:1.5px solid #ddd;border-radius:6px;font-size:.85rem;outline:none;color:#000}
-.modal-field input:focus{border-color:#c0392b}
-.modal-check{display:flex;align-items:center;gap:6px;font-size:.8rem;color:#333;margin-bottom:12px;cursor:pointer;user-select:none}
-.modal-check input{cursor:pointer}
-.modal-btns{display:flex;gap:8px}
-.btn-cancel{flex:1;padding:9px;border:1px solid #ddd;background:white;border-radius:6px;font-size:.8rem;font-weight:600;color:#666;cursor:pointer;transition:all .2s}
-.btn-cancel:active{background:#f5f5f5}
-.btn-confirm{flex:1;padding:9px;background:#c0392b;color:white;border:none;border-radius:6px;font-size:.8rem;font-weight:600;cursor:pointer;transition:background .2s}
-.btn-confirm:active{background:#a93226}
-.password-modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:300;align-items:center;justify-content:center}
-.password-modal-overlay.open{display:flex}
-.password-modal{background:white;border-radius:12px;padding:20px;max-width:300px;width:90%;box-shadow:0 4px 24px rgba(0,0,0,.3)}
-.password-modal h3{font-size:.95rem;font-weight:700;color:#333;margin-bottom:12px;text-align:center}
-.password-modal-input{width:100%;padding:10px;border:1.5px solid #ddd;border-radius:6px;font-size:.85rem;outline:none;margin-bottom:12px;color:#000}
-.password-modal-input:focus{border-color:#c0392b}
-.password-modal-btns{display:flex;gap:8px}
-.btn-pwd-cancel{flex:1;padding:9px;border:1px solid #ddd;background:white;border-radius:6px;font-size:.8rem;font-weight:600;color:#666;cursor:pointer;transition:all .2s}
-.btn-pwd-cancel:active{background:#f5f5f5}
-.btn-pwd-confirm{flex:1;padding:9px;background:#c0392b;color:white;border:none;border-radius:6px;font-size:.8rem;font-weight:600;cursor:pointer;transition:background .2s}
-.btn-pwd-confirm:active{background:#a93226}
-.password-error{color:#e74c3c;font-size:.75rem;margin-top:8px;text-align:center;display:none}
-.install-banner{background:#2196f3;color:white;padding:10px;text-align:center;margin-bottom:10px;border-radius:8px;cursor:pointer;display:none;font-size:.8rem;font-weight:600}
-.install-banner.show{display:block}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#c0392b">
+    <meta name="description" content="Checklist Praça Quente">
+    <link rel="manifest" href="data:application/manifest+json,{%22name%22:%22Checklist%20Pra%C3%A7a%20Quente%22,%22short_name%22:%22Pra%C3%A7a%20Quente%22,%22display%22:%22standalone%22,%22theme_color%22:%22%23c0392b%22,%22background_color%22:%22%23ffffff%22}">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect fill=%27%23c0392b%27 width=%27100%27 height=%27100%27/%3E%3Ctext x=%2750%27 y=%2770%27 font-size=%2760%27 text-anchor=%27middle%27%3E%E2%98%80%EF%B8%8F%3C/text%3E%3C/svg%3E">
+    <title>Checklist Praça Quente</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f5; color: #333; padding: 10px; }
+        .container { background: #fff; border-radius: 8px; padding: 20px; margin: 10px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #c0392b; margin: 20px 0 10px; font-size: 24px; }
+        .tabs { display: flex; gap: 5px; overflow-x: auto; margin: 15px 0; }
+        button { padding: 10px 15px; background: #f0f0f0; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; font-size: 14px; }
+        button.active { background: #c0392b; color: white; }
+        input, select { width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
+        .section { margin: 15px 0; padding: 15px; background: #f9f9f9; border-left: 4px solid #c0392b; }
+        .section h3 { color: #c0392b; margin-bottom: 10px; }
+        .item { display: flex; align-items: center; margin: 8px 0; padding: 8px; background: white; border-radius: 4px; }
+        .item input[type="checkbox"] { width: 20px; height: 20px; margin-right: 10px; cursor: pointer; }
+        .item-label { flex: 1; color: black; }
+        .temp-input { width: 70px !important; }
+        .temp-alert { color: red; font-weight: bold; }
+        .photo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; margin: 10px 0; }
+        .photo-item { position: relative; width: 100%; padding-top: 100%; overflow: hidden; border-radius: 4px; background: #ddd; }
+        .photo-item img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
+        .photo-delete { position: absolute; top: 5px; right: 5px; background: #c0392b; color: white; border: none; padding: 5px 8px; border-radius: 3px; cursor: pointer; font-size: 12px; }
+        .progress-bar { width: 100%; height: 20px; background: #e0e0e0; border-radius: 10px; overflow: hidden; margin: 10px 0; }
+        .progress-fill { height: 100%; background: #c0392b; transition: width 0.3s; }
+        .banner { background: #c0392b; color: white; padding: 15px; border-radius: 4px; margin: 10px 0; text-align: center; cursor: pointer; font-weight: bold; }
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+        .modal.show { display: flex; }
+        .modal-content { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        .modal-content input { width: 200px; }
+        .hdr-field label { display: block; margin: 10px 0 5px; color: black; font-weight: bold; }
+        .hdr-field input { color: black; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .schedule-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin: 10px 0; }
+        .day-btn { padding: 10px; text-align: center; border: 2px solid #ddd; border-radius: 4px; cursor: pointer; font-size: 12px; }
+        .day-btn.active { background: #c0392b; color: white; border-color: #c0392b; }
+    </style>
 </head>
 <body>
-<div class="install-banner" id="installBanner" onclick="installApp()">📱 Toque para instalar o app no seu celular</div>
-<div class="header">
-  <h1>🔥 Checklist Praça Quente</h1>
-  <button class="hdr-btn" onclick="openPhotoInput()" title="Tirar foto">📸</button>
-</div>
-<div class="hdr-fields" style="padding:0 14px 10px">
-  <div class="hdr-field">
-    <label>Responsável</label>
-    <input type="text" id="resp" placeholder="Nome" oninput="saveState()" style="color:#000">
-  </div>
-  <div class="hdr-field">
-    <label>Data</label>
-    <input type="date" id="dateInput" onchange="onDateChange()" style="color:#000">
-  </div>
-</div>
-<div style="padding:0 14px 10px">
-  <div class="prog-wrap"><div class="prog-bar" id="pb"></div></div>
-  <div class="prog-lbl" id="pl">0 de 0 itens</div>
-</div>
-<div class="tabs" id="mainTabs">
-  <button class="tab-btn active" onclick="showTab('abertura')" id="tab-abertura">Abertura<span class="tbadge" id="badge-abertura">0/0</span></button>
-  <button class="tab-btn" onclick="showTab('mep')" id="tab-mep">MEP<span class="tbadge" id="badge-mep">0/0</span></button>
-  <button class="tab-btn" onclick="showTab('operacao')" id="tab-operacao">Operação<span class="tbadge" id="badge-operacao">0/0</span></button>
-  <button class="tab-btn" onclick="showTab('fechamento')" id="tab-fechamento">Fechamento<span class="tbadge" id="badge-fechamento">0/0</span></button>
-  <button class="tab-btn admin-tab" onclick="requestAdminPassword()" id="tab-admin">⚙️<span class="tbadge">Config</span></button>
-</div>
-<div id="panel-abertura" class="panel active"></div>
-<div id="panel-mep" class="panel"></div>
-<div id="panel-operacao" class="panel"></div>
-<div id="panel-fechamento" class="panel"></div>
-<div id="panel-admin" class="panel">
-  <div class="admin-sub-tabs">
-    <button class="ast-btn active" id="ast-agenda" onclick="showAdminTab('agenda')">📅 Agenda</button>
-    <button class="ast-btn" id="ast-itens" onclick="showAdminTab('itens')">📋 Itens</button>
-    <button class="ast-btn" id="ast-config" onclick="showAdminTab('config')">💬 WhatsApp</button>
-    <button class="ast-btn" style="margin-left:auto" title="Recarregar mudanças" onclick="renderAdmin();alert('✅ Dados atualizados!')">🔄 Recarregar</button>
-  </div>
-  <div class="admin-content open" id="admin-agenda"></div>
-  <div class="admin-content" id="admin-itens"></div>
-  <div class="admin-content" id="admin-config">
-    <div class="add-sec-card">
-      <h4>💬 Configurar WhatsApp</h4>
-      <div class="add-sec-form">
-        <div class="add-sec-row">
-          <div style="flex:1">
-            <label style="font-size:.7rem;color:#888;display:block;margin-bottom:4px">Número com código do país (ex: 5511987654321)</label>
-            <input type="text" id="waPhone" placeholder="5511987654321" style="width:100%">
-          </div>
+
+<div class="container">
+    <h1>☀️ Checklist Praça Quente</h1>
+
+    <div class="banner" id="installBanner" style="display:none; cursor:pointer;">
+        📱 Toque para instalar o app no seu celular
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('checklist', this)">Checklist</button>
+        <button class="tab-btn" onclick="switchTab('admin', this)">Admin 🔒</button>
+        <button class="tab-btn" onclick="switchTab('agenda', this)">Agenda</button>
+    </div>
+
+    <!-- CHECKLIST TAB -->
+    <div id="checklist" class="tab-content active">
+        <div class="hdr-field">
+            <label>Responsável:</label>
+            <input type="text" id="nomeResponsavel" placeholder="Seu nome" onchange="salvarDados()">
         </div>
-        <div class="add-sec-row">
-          <div style="flex:1">
-            <label style="font-size:.7rem;color:#888;display:block;margin-bottom:4px">Nome do grupo (opcional)</label>
-            <input type="text" id="waGroup" placeholder="Grupo Praça Quente" style="width:100%">
-          </div>
+        <div class="hdr-field">
+            <label>Data:</label>
+            <input type="date" id="dataAtual" onchange="mudarData()">
         </div>
-        <button class="btn-add-sec" onclick="savePhoneNumber()">✅ Salvar Configuração</button>
-      </div>
+
+        <div class="tabs" id="sectionTabs"></div>
+        <div id="checklistContainer"></div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <p id="progressText" style="text-align:center; margin:10px 0; font-weight:bold;"></p>
+
+        <button onclick="abrirFoto()" style="width:100%; padding:12px; background:#f0ad4e; color:white; border:none; border-radius:4px; margin:10px 0; font-weight:bold;">
+            📸 Tirar Foto
+        </button>
+        <input type="file" id="inputFoto" accept="image/*" capture="environment" style="display:none;">
+
+        <div class="photo-grid" id="fotoGrid"></div>
+
+        <button onclick="enviarWhatsapp()" style="width:100%; padding:12px; background:#25d366; color:white; border:none; border-radius:4px; margin:10px 0; font-weight:bold;">
+            📤 Enviar Relatório via WhatsApp
+        </button>
     </div>
-  </div>
-</div>
-<div id="photosPanel" style="padding:10px 12px;display:none">
-  <div class="photos-card">
-    <div class="photos-label">📸 Fotos do dia <span class="photo-count" id="photoCount">0</span></div>
-    <div id="photosContainer" class="photos-grid"></div>
-  </div>
-</div>
-<div class="spacer"></div>
-<div class="bottom-bar" id="bottomBar">
-  <button class="btn-reset" onclick="resetDay()" title="Limpar dia">🔄</button>
-  <button class="btn-reset" id="sharePhotosBtn" onclick="sharePhotos()" title="Compartilhar fotos" style="display:none">📤 Fotos</button>
-  <button class="btn-wa" onclick="sendWhatsappComFotos()">
-    <svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-    Relatório
-  </button>
-</div>
-<input type="file" id="photoInput" accept="image/*" capture="environment" onchange="addPhoto(event)">
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal" id="modal">
-    <h3 id="modalTitle">Editar item</h3>
-    <div class="modal-field">
-      <label>Texto do item</label>
-      <input type="text" id="modalText" placeholder="Descrição">
+
+    <!-- ADMIN TAB -->
+    <div id="admin" class="tab-content">
+        <button onclick="solicitarSenha()" style="width:100%; padding:12px; background:#c0392b; color:white; border:none; border-radius:4px; margin:10px 0; font-weight:bold;">
+            🔓 Desbloquear Admin
+        </button>
+        <div id="painelAdmin" style="display:none;">
+            <h2>Gerenciar Seções</h2>
+            <div id="secoesList"></div>
+            <h2>Gerenciar Itens</h2>
+            <div id="itensList"></div>
+        </div>
     </div>
-    <label class="modal-check">
-      <input type="checkbox" id="modalIsTemp">
-      🌡️ Exigir temperatura
-    </label>
-    <div class="modal-btns">
-      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
-      <button class="btn-confirm" onclick="saveModalItem()">Salvar</button>
+
+    <!-- AGENDA TAB -->
+    <div id="agenda" class="tab-content">
+        <h2>Ativar Seções por Dia</h2>
+        <div id="agendaContainer"></div>
     </div>
-  </div>
 </div>
-<div class="password-modal-overlay" id="passwordOverlay">
-  <div class="password-modal">
-    <h3>🔒 Acesso Administrativo</h3>
-    <input type="password" id="passwordInput" class="password-modal-input" placeholder="Senha" onkeydown="if(event.key==='Enter')verifyPassword()">
-    <div class="password-error" id="passwordError">Senha incorreta!</div>
-    <div class="password-modal-btns">
-      <button class="btn-pwd-cancel" onclick="closePasswordModal()">Cancelar</button>
-      <button class="btn-pwd-confirm" onclick="verifyPassword()">Acessar</button>
+
+<div class="modal" id="modalSenha">
+    <div class="modal-content">
+        <h2>Digite a Senha</h2>
+        <input type="password" id="inputSenha" placeholder="Senha" onkeypress="if(event.key==='Enter')verificarSenha()">
+        <br>
+        <button onclick="verificarSenha()" style="margin:10px 5px; background:#c0392b; color:white;">Confirmar</button>
+        <button onclick="fecharModal()" style="margin:10px 5px;">Cancelar</button>
     </div>
-  </div>
 </div>
+
 <script>
-// ══════════════════════════════════════════════
-// PWA INSTALLATION
-// ══════════════════════════════════════════════
-let deferredPrompt=null;
-window.addEventListener('beforeinstallprompt',e=>{
-  e.preventDefault();
-  deferredPrompt=e;
-  document.getElementById('installBanner').classList.add('show');
+// ========== PWA SETUP ==========
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('data:application/javascript,' + encodeURIComponent(`
+        self.addEventListener('install', e => self.skipWaiting());
+        self.addEventListener('activate', e => e.waitUntil(clients.claim()));
+        self.addEventListener('fetch', e => e.respondWith(fetch(e.request)));
+    `)).catch(() => {});
+}
+
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById('installBanner').style.display = 'block';
 });
-function installApp(){
-  if(deferredPrompt){
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(choiceResult=>{
-      if(choiceResult.outcome==='accepted'){
-        document.getElementById('installBanner').classList.remove('show');
-        deferredPrompt=null;
-      }
-    });
-  }
-}
-// ══════════════════════════════════════════════
-// SERVICE WORKER REGISTRATION
-// ══════════════════════════════════════════════
-if('serviceWorker' in navigator && window.location.protocol === 'https:') {
-  const swCode=`
-  const CACHE_NAME='pq-checklist-v1';
-  const URLS_TO_CACHE=['/'];
-  self.addEventListener('install',e=>{
-    e.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(URLS_TO_CACHE)).then(()=>self.skipWaiting()));
-  });
-  self.addEventListener('activate',e=>{
-    e.waitUntil(caches.keys().then(cacheNames=>Promise.all(cacheNames.map(n=>{
-      if(n!==CACHE_NAME)return caches.delete(n);
-    }))).then(()=>self.clients.claim()));
-  });
-  self.addEventListener('fetch',e=>{
-    if(e.request.method!=='GET')return;
-    e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(r=>{
-      if(!r||r.status!==200)return r;
-      const rc=r.clone();
-      caches.open(CACHE_NAME).then(c=>c.put(e.request,rc));
-      return r;
-    }).catch(()=>caches.match('/'))));
-  });
-  `;
-  const blob=new Blob([swCode],{type:'application/javascript'});
-  const swUrl=URL.createObjectURL(blob);
-  navigator.serviceWorker.register(swUrl,{scope:'/'}).then(r=>{
-    console.log('✓ SW registrado');
-  }).catch(e=>{
-    console.log('SW error (normal se for local):',e.message);
-  });
-}
-  // ══════════════════════════════════════════════
-// RESTO DO CÓDIGO
-// ══════════════════════════════════════════════
-const ADMIN_PASSWORD = '37014520';
-function requestAdminPassword(){
-  document.getElementById('passwordInput').value='';
-  document.getElementById('passwordError').style.display='none';
-  document.getElementById('passwordOverlay').classList.add('open');
-  document.getElementById('passwordInput').focus();
-}
-function verifyPassword(){
-  const pwd = document.getElementById('passwordInput').value;
-  if(pwd === ADMIN_PASSWORD){
-    closePasswordModal();
-    showTab('admin');
-    renderAdmin();
-  } else {
-    document.getElementById('passwordError').style.display='block';
-    document.getElementById('passwordInput').value='';
-    document.getElementById('passwordInput').focus();
-  }
-}
-function closePasswordModal(){
-  document.getElementById('passwordOverlay').classList.remove('open');
-  document.getElementById('passwordInput').value='';
-  document.getElementById('passwordError').style.display='none';
-}
-document.getElementById('passwordOverlay').addEventListener('click',e=>{
-  if(e.target===document.getElementById('passwordOverlay'))closePasswordModal();
-});
-const DEFAULT_SECTIONS=[{id:'ab_hig',name:'Abertura e Higienização',icon:'☀️',tab:'abertura',order:0},{id:'ab_ute',name:'Utensílios e Equipamentos',icon:'🔧',tab:'abertura',order:1},{id:'ab_est',name:'Organização e Estoque',icon:'📦',tab:'abertura',order:2},{id:'mep_cafe',name:'Café da Manhã / Brunch',icon:'☕',tab:'mep',order:3},{id:'mep_teg',name:'Teglias / Pizzas',icon:'🍕',tab:'mep',order:4},{id:'mep_san',name:'Sanduíches',icon:'🥪',tab:'mep',order:5},{id:'op_prat',name:'Pratos do Dia',icon:'🍲',tab:'operacao',order:6},{id:'op_ent',name:'Entradas',icon:'🥗',tab:'operacao',order:7},{id:'fech_lim',name:'Fechamento e Limpeza',icon:'🧹',tab:'fechamento',order:8},{id:'fech_pas',name:'Passagem de Turno',icon:'📝',tab:'fechamento',order:9}];
-const DEFAULT_ITEMS=[{id:'i_ab1',text:'Ligar fornos e verificar temperatura',sec:'ab_hig',type:'default',order:0},{id:'i_ab2',text:'Conectar fogões e verificar chamas',sec:'ab_hig',type:'default',order:1},{id:'i_ab3',text:'Ligar salamandra',sec:'ab_hig',type:'default',order:2},{id:'i_ab4',text:'Ligar fogão de indução',sec:'ab_hig',type:'default',order:3},{id:'i_ab5',text:'Ligar coifa',sec:'ab_hig',type:'default',order:4},{id:'i_ab6',text:'Ligar termocirculador quando necessário',sec:'ab_hig',type:'default',order:5},{id:'i_ab7',text:'Higienizar bancadas com água, detergente e álcool',sec:'ab_hig',type:'default',order:6},{id:'i_ab8',text:'Aferir temperatura dos refrigeradores',sec:'ab_hig',type:'temperature',order:7},{id:'i_ab9',text:'Conferir validade dos produtos etiquetados',sec:'ab_hig',type:'default',order:8},{id:'i_ut1',text:'Panelas no lugar',sec:'ab_ute',type:'default',order:0},{id:'i_ut2',text:'Frigideiras (grandes e pequenas)',sec:'ab_ute',type:'default',order:1},{id:'i_ut3',text:'Conchas disponíveis',sec:'ab_ute',type:'default',order:2},{id:'i_ut4',text:'Colheres grandes e pequenas',sec:'ab_ute',type:'default',order:3},{id:'i_ut5',text:'Pinças disponíveis',sec:'ab_ute',type:'default',order:4},{id:'i_ut6',text:'Pão duro disponível',sec:'ab_ute',type:'default',order:5},{id:'i_ut7',text:'Azeite abastecido',sec:'ab_ute',type:'default',order:6},{id:'i_ut8',text:'Sal disponível',sec:'ab_ute',type:'default',order:7},{id:'i_ut9',text:'Óleo de girassol disponível',sec:'ab_ute',type:'default',order:8},{id:'i_es1',text:'Arrumar freezer',sec:'ab_est',type:'default',order:0},{id:'i_es2',text:'Levar para câmara itens não utilizados no dia',sec:'ab_est',type:'default',order:1},{id:'i_es3',text:'Manter prateleiras arrumadas',sec:'ab_est',type:'default',order:2},{id:'i_es4',text:'Portas das geladeiras fechadas',sec:'ab_est',type:'default',order:3},{id:'i_es5',text:'Todos os insumos armazenados adequadamente',sec:'ab_est',type:'default',order:4},{id:'i_es6',text:'Conferir MEPs para o plantão seguinte',sec:'ab_est',type:'default',order:5},{id:'i_es7',text:'Conferir requisições entregues',sec:'ab_est',type:'default',order:6},{id:'i_es8',text:'Solicitar insumos faltantes',sec:'ab_est',type:'default',order:7},{id:'i_cf1',text:'Bacon assado e triturado',sec:'mep_cafe',type:'default',order:0},{id:'i_cf2',text:'Brioche cortado (brunch)',sec:'mep_cafe',type:'default',order:1},{id:'i_cf3',text:'Brioche rabanada (brunch)',sec:'mep_cafe',type:'default',order:2},{id:'i_cf4',text:'Ceboulette cortado',sec:'mep_cafe',type:'default',order:3},{id:'i_cf5',text:'Cogumelo confitado',sec:'mep_cafe',type:'default',order:4},{id:'i_cf6',text:'Baguete cortada',sec:'mep_cafe',type:'default',order:5},{id:'i_cf7',text:'Granola de croissant',sec:'mep_cafe',type:'default',order:6},{id:'i_cf8',text:'Iogurte caseiro',sec:'mep_cafe',type:'default',order:7},{id:'i_cf9',text:'Manteiga ponto pomada',sec:'mep_cafe',type:'default',order:8},{id:'i_cf10',text:'Mel',sec:'mep_cafe',type:'default',order:9},{id:'i_cf11',text:'Mix de folhas higienizadas',sec:'mep_cafe',type:'default',order:10},{id:'i_cf12',text:'Molho de Parmesão (brunch)',sec:'mep_cafe',type:'default',order:11},{id:'i_cf13',text:'Molho Holandaise (brunch)',sec:'mep_cafe',type:'default',order:12},{id:'i_cf14',text:'Ovos Mexidos',sec:'mep_cafe',type:'default',order:13},{id:'i_cf15',text:'Ovos Poche (brunch)',sec:'mep_cafe',type:'default',order:14},{id:'i_cf16',text:'Pasta de avocado (brunch)',sec:'mep_cafe',type:'default',order:15},{id:'i_cf17',text:'Presunto porcionado',sec:'mep_cafe',type:'default',order:16},{id:'i_cf18',text:'Pudim de chia',sec:'mep_cafe',type:'default',order:17},{id:'i_cf19',text:'Queijo catua cortado',sec:'mep_cafe',type:'default',order:18},{id:'i_cf20',text:'Queijo mussarela porcionado',sec:'mep_cafe',type:'default',order:19},{id:'i_cf21',text:'Pasta de ovos',sec:'mep_cafe',type:'default',order:20},{id:'i_tg1',text:'Bacon assado',sec:'mep_teg',type:'default',order:0},{id:'i_tg2',text:'Calabresa assada',sec:'mep_teg',type:'default',order:1},{id:'i_tg3',text:'Copa lombo cortado',sec:'mep_teg',type:'default',order:2},{id:'i_tg4',text:'Creme de pepino',sec:'mep_teg',type:'default',order:3},{id:'i_tg5',text:'Focaccia cortada',sec:'mep_teg',type:'default',order:4},{id:'i_tg6',text:'Funcho higienizado',sec:'mep_teg',type:'default',order:5},{id:'i_tg7',text:'Laranja confitada',sec:'mep_teg',type:'default',order:6},{id:'i_tg8',text:'Manjericão folhas',sec:'mep_teg',type:'default',order:7},{id:'i_tg9',text:'Mussarela de búfala cortada',sec:'mep_teg',type:'default',order:8},{id:'i_tg10',text:'Mussarela fatiada',sec:'mep_teg',type:'default',order:9},{id:'i_tg11',text:'Passata de tomate temperada',sec:'mep_teg',type:'default',order:10},{id:'i_tg12',text:'Picles de cebola roxa',sec:'mep_teg',type:'default',order:11},{id:'i_sn1',text:'Batata chips',sec:'mep_san',type:'default',order:0},{id:'i_sn2',text:'Cebola caramelizada',sec:'mep_san',type:'default',order:1},{id:'i_sn3',text:'Ciabatta cortada',sec:'mep_san',type:'default',order:2},{id:'i_sn4',text:'Cogumelos assados',sec:'mep_san',type:'default',order:3},{id:'i_sn5',text:'Cream cheese',sec:'mep_san',type:'default',order:4},{id:'i_sn6',text:'Creme de pepino',sec:'mep_san',type:'default',order:5},{id:'i_sn7',text:'Cupim desfiado',sec:'mep_san',type:'default',order:6},{id:'i_sn8',text:'Guacamole',sec:'mep_san',type:'default',order:7},{id:'i_sn9',text:'Jurassine cortado',sec:'mep_san',type:'default',order:8},{id:'i_sn10',text:'Mix de folhas higienizadas',sec:'mep_san',type:'default',order:9},{id:'i_sn11',text:'Molho de mostarda',sec:'mep_san',type:'default',order:10},{id:'i_sn12',text:'Molho kimchi',sec:'mep_san',type:'default',order:11},{id:'i_sn13',text:'Molho pesto',sec:'mep_san',type:'default',order:12},{id:'i_sn14',text:'Molho vinagrete',sec:'mep_san',type:'default',order:13},{id:'i_sn15',text:'Mussarela porcionada',sec:'mep_san',type:'default',order:14},{id:'i_sn16',text:'Ovo poche (brunch)',sec:'mep_san',type:'default',order:15},{id:'i_sn17',text:'Pasta de ovos',sec:'mep_san',type:'default',order:16},{id:'i_sn18',text:'Pimentão confitado',sec:'mep_san',type:'default',order:17},{id:'i_sn19',text:'Queijo Stracciatela',sec:'mep_san',type:'default',order:18},{id:'i_sn20',text:'Rúcula higienizada',sec:'mep_san',type:'default',order:19},{id:'i_sn21',text:'Tomate confitado',sec:'mep_san',type:'default',order:20},{id:'i_op1',text:'Picadinho preparado',sec:'op_prat',type:'default',order:0},{id:'i_op2',text:'Arroz branco cozido',sec:'op_prat',type:'default',order:1},{id:'i_op3',text:'Moqueca pronta',sec:'op_prat',type:'default',order:2},{id:'i_op4',text:'Filé cortado e porcionado',sec:'op_prat',type:'default',order:3},{id:'i_op5',text:'Molho roti preparado',sec:'op_prat',type:'default',order:4},{id:'i_op6',text:'Farofa de cebola pronta',sec:'op_prat',type:'default',order:5},{id:'i_op7',text:'Couve cortada e higienizada',sec:'op_prat',type:'default',order:6},{id:'i_op8',text:'Alho picado',sec:'op_prat',type:'default',order:7},{id:'i_op9',text:'Cebola cortada',sec:'op_prat',type:'default',order:8},{id:'i_op10',text:'Pimentão vermelho cortado',sec:'op_prat',type:'default',order:9},{id:'i_op11',text:'Pimentão amarelo cortado',sec:'op_prat',type:'default',order:10},{id:'i_op12',text:'Tomate em cubos',sec:'op_prat',type:'default',order:11},{id:'i_op13',text:'Mix de folhas higienizadas',sec:'op_prat',type:'default',order:12},{id:'i_op14',text:'Vinagrete preparado',sec:'op_prat',type:'default',order:13},{id:'i_en1',text:'Batata assada preparada',sec:'op_ent',type:'default',order:0},{id:'i_en2',text:'Ovo mexido pronto',sec:'op_ent',type:'default',order:1},{id:'i_en3',text:'Cebola caramelizada',sec:'op_ent',type:'default',order:2},{id:'i_en4',text:'Alface americana higienizada',sec:'op_ent',type:'default',order:3},{id:'i_en5',text:'Alioli preparado',sec:'op_ent',type:'default',order:4},{id:'i_en6',text:'Molho Caesar preparado',sec:'op_ent',type:'default',order:5},{id:'i_en7',text:'Queijo parmesão ralado',sec:'op_ent',type:'default',order:6},{id:'i_en8',text:'Croutons de croissant',sec:'op_ent',type:'default',order:7},{id:'i_en9',text:'Frango defumado porcionado',sec:'op_ent',type:'default',order:8},{id:'i_fl1',text:'Higienizar bancadas com água, detergente e álcool',sec:'fech_lim',type:'default',order:0},{id:'i_fl2',text:'Limpar fornos e equipamentos',sec:'fech_lim',type:'default',order:1},{id:'i_fl3',text:'Desligar coifa',sec:'fech_lim',type:'default',order:2},{id:'i_fl4',text:'Higienizar e guardar fogões',sec:'fech_lim',type:'default',order:3},{id:'i_fl5',text:'Higienizar e guardar termocirculador',sec:'fech_lim',type:'default',order:4},{id:'i_fl6',text:'Aferir temperatura (fechamento)',sec:'fech_lim',type:'temperature',order:5},{id:'i_fl7',text:'Conferir fechamento das portas dos refrigeradores',sec:'fech_lim',type:'default',order:6},{id:'i_fl8',text:'Conferir etiquetas de todos os produtos',sec:'fech_lim',type:'default',order:7},{id:'i_fl9',text:'Conferir organização da praça',sec:'fech_lim',type:'default',order:8},{id:'i_pt1',text:'Sinalizar produtos faltantes no grupo',sec:'fech_pas',type:'default',order:0},{id:'i_pt2',text:'Sinalizar MEPs a realizar',sec:'fech_pas',type:'default',order:1},{id:'i_pt3',text:'Conferir MEPs para próximo plantão',sec:'fech_pas',type:'default',order:2},{id:'i_pt4',text:'Conferir requisições entregues',sec:'fech_pas',type:'default',order:3},{id:'i_pt5',text:'Manter cozinha limpa e organizada',sec:'fech_pas',type:'default',order:4}];
-function buildDefaultSchedule(){const allIds=DEFAULT_SECTIONS.map(s=>s.id);const sched={};for(let d=0;d<7;d++)sched[d]=[...allIds];return sched}
-const K_SECTIONS='pq_sections';
-const K_ITEMS='pq_items';
-const K_SCHEDULE='pq_schedule';
-const K_STATE=d=>'pq_state_'+d;
-const K_PHOTOS=d=>'pq_photos_'+d;
-const K_WHATSAPP='pq_whatsapp_config';
-function getSections(){const s=localStorage.getItem(K_SECTIONS);return s?JSON.parse(s):JSON.parse(JSON.stringify(DEFAULT_SECTIONS))}
-function getItems(){const s=localStorage.getItem(K_ITEMS);return s?JSON.parse(s):JSON.parse(JSON.stringify(DEFAULT_ITEMS))}
-function getSchedule(){const s=localStorage.getItem(K_SCHEDULE);return s?JSON.parse(s):buildDefaultSchedule()}
-function getPhotos(date){const s=localStorage.getItem(K_PHOTOS(date));return s?JSON.parse(s):[]}
-function saveSections(data){localStorage.setItem(K_SECTIONS,JSON.stringify(data))}
-function saveItems(data){localStorage.setItem(K_ITEMS,JSON.stringify(data))}
-function saveSchedule(data){localStorage.setItem(K_SCHEDULE,JSON.stringify(data))}
-function savePhotos(date,data){localStorage.setItem(K_PHOTOS(date),JSON.stringify(data))}
-function getState(date){const s=localStorage.getItem(K_STATE(date));return s?JSON.parse(s):{responsavel:'',checks:{},obs:{}}}
-function putState(date,state){localStorage.setItem(K_STATE(date),JSON.stringify(state))}
-let currentDate='';
-let currentTab='abertura';
-let dayState={responsavel:'',checks:{},obs:{}};
-let photos=[];
-document.addEventListener('DOMContentLoaded',()=>{
-  const today=new Date();
-  const y=today.getFullYear();
-  const m=String(today.getMonth()+1).padStart(2,'0');
-  const d=String(today.getDate()).padStart(2,'0');
-  currentDate=`${y}-${m}-${d}`;
-  document.getElementById('dateInput').value=currentDate;
-  dayState=getState(currentDate);
-  photos=getPhotos(currentDate);
-  document.getElementById('resp').value=dayState.responsavel||'';
-  renderAllPanels();
-  updateProgress();
-  renderPhotos();
-  renderAdmin();
-});
-function onDateChange(){
-  saveState();
-  savePhotos(currentDate,photos);
-  currentDate=document.getElementById('dateInput').value;
-  dayState=getState(currentDate);
-  photos=getPhotos(currentDate);
-  document.getElementById('resp').value=dayState.responsavel||'';
-  renderAllPanels();
-  updateProgress();
-  renderPhotos();
-}
-function saveState(){
-  dayState.responsavel=document.getElementById('resp').value;
-  document.querySelectorAll('.item[data-id]').forEach(el=>{
-    const id=el.dataset.id;
-    const checked=el.classList.contains('checked');
-    const tempEl=el.querySelector('.temp-input');
-    const noteEl=el.querySelector('.temp-note');
-    if(!dayState.checks[id])dayState.checks[id]={};
-    dayState.checks[id].checked=checked;
-    if(tempEl)dayState.checks[id].temp=tempEl.value;
-    if(noteEl)dayState.checks[id].note=noteEl.value;
-  });
-  document.querySelectorAll('textarea[data-obs]').forEach(el=>{
-    dayState.obs[el.dataset.obs]=el.value;
-  });
-  putState(currentDate,dayState);
-  updateProgress();
-}
-function openPhotoInput(){document.getElementById('photoInput').click()}
-function addPhoto(e){
-  const file=e.target.files[0];
-  if(!file)return;
-  const reader=new FileReader();
-  reader.onload=evt=>{
-    if(photos.length<10){
-      photos.push(evt.target.result);
-      savePhotos(currentDate,photos);
-      renderPhotos();
-    }else{
-      alert('Máx 10 fotos/dia');
+
+function instalarApp() {
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(result => {
+            if (result.outcome === 'accepted') {
+                document.getElementById('installBanner').style.display = 'none';
+            }
+            deferredPrompt = null;
+        });
     }
-  };
-  reader.readAsDataURL(file);
-  document.getElementById('photoInput').value='';
 }
-function deletePhoto(idx){
-  photos.splice(idx,1);
-  savePhotos(currentDate,photos);
-  renderPhotos();
+
+document.getElementById('installBanner').addEventListener('click', instalarApp);
+
+// ========== DADOS ==========
+const SENHA = '37014520';
+
+const SECOES_PADRAO = [
+    {id: 1, nome: 'Abertura', icon: '🌅'},
+    {id: 2, nome: 'MEP', icon: '🔧'},
+    {id: 3, nome: 'Operação', icon: '🔥'},
+    {id: 4, nome: 'Fechamento', icon: '🧹'}
+];
+
+const ITENS_PADRAO = [
+    {id: 1, secao: 1, nome: 'Ligar câmaras', temp: false},
+    {id: 2, secao: 1, nome: 'Verificar temperatura', temp: true},
+    {id: 3, secao: 1, nome: 'Limpar plancha', temp: false},
+    {id: 4, secao: 2, nome: 'Conferir ingredientes', temp: false},
+    {id: 5, secao: 2, nome: 'Preparar mise en place', temp: false},
+    {id: 6, secao: 3, nome: 'Iniciar serviço', temp: false},
+    {id: 7, secao: 3, nome: 'Temperatura interna', temp: true},
+    {id: 8, secao: 4, nome: 'Desligar equipamentos', temp: false},
+    {id: 9, secao: 4, nome: 'Limpeza final', temp: false},
+    {id: 10, secao: 4, nome: 'Verificar câmaras', temp: true}
+];
+
+function getHoje() {
+    return document.getElementById('dataAtual').value;
 }
-function renderPhotos(){
-  const panel=document.getElementById('photosPanel');
-  const container=document.getElementById('photosContainer');
-  const count=document.getElementById('photoCount');
-  const shareBtn=document.getElementById('sharePhotosBtn');
-  if(photos.length===0){
-    panel.style.display='none';
-    shareBtn.style.display='none';
-    return;
-  }
-  panel.style.display='block';
-  shareBtn.style.display='block';
-  count.textContent=photos.length;
-  container.innerHTML=photos.map((p,i)=>`<div class="photo-item"><img src="${p}" onclick="viewPhoto(${i})"><button class="photo-del" onclick="deletePhoto(${i})">✕</button></div>`).join('');
+
+function getSecoes() {
+    return JSON.parse(localStorage.getItem('pq_secoes') || JSON.stringify(SECOES_PADRAO));
 }
-function viewPhoto(idx){
-  const img=new Image();
-  img.src=photos[idx];
-  const w=window.open('');
-  w.document.write(img.outerHTML);
+
+function getItens() {
+    return JSON.parse(localStorage.getItem('pq_itens') || JSON.stringify(ITENS_PADRAO));
 }
-const TABS=['abertura','mep','operacao','fechamento'];
-const TAB_LABELS={abertura:'Abertura',mep:'MEP',operacao:'Operação',fechamento:'Fechamento'};
-function renderAllPanels(){
-  const sections=getSections();
-  const items=getItems();
-  const schedule=getSchedule();
-  const dow=new Date(currentDate+'T12:00:00').getDay();
-  const activeSecs=schedule[dow]||[];
-  TABS.forEach(tab=>{
-    const panel=document.getElementById('panel-'+tab);
-    let html=`<div class="all-done" id="alldone-${tab}">✅ ${TAB_LABELS[tab]} completo!</div>`;
-    if(tab==='mep'){html+=`<div class="rules-banner"><strong>🔁 MEP é contínua</strong> — se acabou um produto, repor imediatamente.</div>`}
-    const tabSecs=sections.filter(s=>s.tab===tab&&activeSecs.includes(s.id)).sort((a,b)=>a.order-b.order);
-    if(tabSecs.length===0){html+=`<div class="empty-day"><div class="ed-icon">📅</div>Nenhuma seção agendada para este dia.</div>`}else{tabSecs.forEach(sec=>{const secItems=items.filter(i=>i.sec===sec.id).sort((a,b)=>a.order-b.order);html+=renderSection(sec,secItems)})}
-    html+=`<div class="obs-card"><label>📝 Observações</label><textarea data-obs="${tab}" placeholder="Registre pendências..." oninput="saveState()">${dayState.obs[tab]||''}</textarea></div>`;
-    panel.innerHTML=html;
-  });
-  updateProgress();
+
+function getEstado() {
+    return JSON.parse(localStorage.getItem(`pq_estado_${getHoje()}`) || '{}');
 }
-function renderSection(sec,items){
-  let html=`<div class="section"><div class="sec-hdr" onclick="toggleSec(this)"><span>${sec.icon} ${sec.name}</span><span class="sc"><span id="sc_${sec.id}">0/${items.length}</span> <span class="chev">▼</span></span></div><div class="item-list">`;
-  items.forEach(item=>{
-    const st=dayState.checks[item.id]||{};
-    const isChecked=st.checked?'checked':'';
-    html+=`<div class="item ${isChecked}" data-id="${item.id}" data-type="${item.type}" onclick="toggleItem(this)"><div class="chk"><svg viewBox="0 0 12 10" fill="none" width="12" height="10"><polyline points="1,5 4.5,9 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-body"><div class="item-text">${esc(item.text)}</div>`;
-    if(item.type==='temperature'){
-      const tempVal=st.temp||'';
-      const noteVal=st.note||'';
-      html+=`<div class="temp-row" onclick="stopProp(event)"><label>🌡️ Temp:</label><input class="temp-input" type="number" step="0.1" placeholder="ex: 4.0" value="${esc(tempVal)}" oninput="saveState();validarTemperatura(this)" onchange="validarTemperatura(this)"><span class="temp-unit">°C</span><textarea class="temp-note" placeholder="Obs (opcional)" oninput="saveState()">${esc(noteVal)}</textarea></div>`;
-    }
-    html+=`</div></div>`;
-  });
-  html+=`</div></div>`;
-  return html;
+
+function salvarEstado(estado) {
+    localStorage.setItem(`pq_estado_${getHoje()}`, JSON.stringify(estado));
+    renderChecklist();
+    atualizarProgresso();
 }
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-function toggleItem(el){el.classList.toggle('checked');saveState();updateProgress()}
-function stopProp(e){e.stopPropagation()}
-function toggleSec(hdr){const list=hdr.nextElementSibling;hdr.classList.toggle('collapsed');list.classList.toggle('hidden')}
-function updateProgress(){
-  const sections=getSections();
-  const items=getItems();
-  const schedule=getSchedule();
-  const dow=new Date(currentDate+'T12:00:00').getDay();
-  const activeSecs=schedule[dow]||[];
-  let grandTotal=0,grandDone=0;
-  TABS.forEach(tab=>{
-    const tabSecs=sections.filter(s=>s.tab===tab&&activeSecs.includes(s.id));
-    const tabItems=items.filter(i=>tabSecs.some(s=>s.id===i.sec));
-    const done=tabItems.filter(i=>{const el=document.querySelector(`.item[data-id="${i.id}"]`);return el?el.classList.contains('checked'):dayState.checks[i.id]&&dayState.checks[i.id].checked}).length;
-    const total=tabItems.length;
-    grandTotal+=total;
-    grandDone+=done;
-    const badge=document.getElementById('badge-'+tab);
-    if(badge)badge.textContent=`${done}/${total}`;
-    const allDone=document.getElementById('alldone-'+tab);
-    if(allDone)allDone.style.display=total>0&&done===total?'block':'none';
-    tabSecs.forEach(sec=>{
-      const secItems=items.filter(i=>i.sec===sec.id);
-      const sdone=secItems.filter(i=>{const el=document.querySelector(`.item[data-id="${i.id}"]`);return el?el.classList.contains('checked'):dayState.checks[i.id]&&dayState.checks[i.id].checked}).length;
-      const scEl=document.getElementById('sc_'+sec.id);
-      if(scEl)scEl.textContent=`${sdone}/${secItems.length}`;
+
+function getFotos() {
+    return JSON.parse(localStorage.getItem(`pq_fotos_${getHoje()}`) || '[]');
+}
+
+function salvarFotos(fotos) {
+    localStorage.setItem(`pq_fotos_${getHoje()}`, JSON.stringify(fotos));
+    renderFotos();
+}
+
+function salvarDados() {
+    localStorage.setItem('pq_nome', document.getElementById('nomeResponsavel').value);
+}
+
+function carregarDados() {
+    document.getElementById('nomeResponsavel').value = localStorage.getItem('pq_nome') || '';
+}
+
+// ========== CHECKLIST ==========
+function renderChecklist() {
+    const estado = getEstado();
+    const itens = getItens();
+    const secoes = getSecoes();
+
+    let html = '';
+
+    secoes.forEach(secao => {
+        const itensDaSecao = itens.filter(i => i.secao === secao.id);
+        if (itensDaSecao.length === 0) return;
+
+        html += `<div class="section">
+            <h3>${secao.icon} ${secao.nome}</h3>`;
+
+        itensDaSecao.forEach(item => {
+            const checked = estado[item.id] ? 'checked' : '';
+            const temp = estado[`temp_${item.id}`] || '';
+            const alertClass = item.temp && temp > 8 ? 'temp-alert' : '';
+
+            html += `<div class="item">
+                <input type="checkbox" ${checked} onchange="toggleItem(${item.id})">
+                <span class="item-label">${item.nome}</span>`;
+
+            if (item.temp) {
+                html += `<input type="number" class="temp-input" placeholder="°C" value="${temp}" onchange="setTemp(${item.id}, this.value)">`;
+                if (alertClass) html += `<span class="temp-alert">⚠️</span>`;
+            }
+            html += `</div>`;
+        });
+
+        html += `</div>`;
     });
-  });
-  const pct=grandTotal>0?grandDone/grandTotal*100:0;
-  document.getElementById('pb').style.width=pct.toFixed(0)+'%';
-  document.getElementById('pl').textContent=`${grandDone} de ${grandTotal} itens (${pct.toFixed(0)}%)`;
+
+    document.getElementById('checklistContainer').innerHTML = html;
 }
-function showTab(name){
-  currentTab=name;
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  const panel=document.getElementById('panel-'+name);
-  const btn=document.getElementById('tab-'+name);
-  if(panel)panel.classList.add('active');
-  if(btn)btn.classList.add('active');
-  const wa=document.querySelector('.btn-wa');
-  if(wa)wa.style.display=name==='admin'?'none':'';
-}
-function resetDay(){
-  if(!confirm(`Limpar todos os itens de ${fmtDate(currentDate)}?`))return;
-  const resp=document.getElementById('resp').value;
-  dayState={responsavel:resp,checks:{},obs:{}};
-  photos=[];
-  putState(currentDate,dayState);
-  savePhotos(currentDate,photos);
-  renderAllPanels();
-  updateProgress();
-  renderPhotos();
-}
-function fmtDate(d){
-  if(!d)return'';
-  const[y,m,dd]=d.split('-');
-  return`${dd}/${m}/${y}`;
-}
-const DAYS=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
-function showAdminTab(name){
-  document.querySelectorAll('.ast-btn').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('.admin-content').forEach(c=>c.classList.remove('open'));
-  document.getElementById('ast-'+name).classList.add('active');
-  document.getElementById('admin-'+name).classList.add('open');
-  if(name==='config'){loadPhoneNumber()}
-}
-function renderAdmin(){
-  renderAgenda();
-  renderItemEditor();
-}
-function renderAgenda(){
-  const sections=getSections();
-  const schedule=getSchedule();
-  const todayDow=new Date().getDay();
-  let html=`<div class="agenda-card"><div class="agenda-card-title">Seções ativas por dia</div>`;
-  for(let d=0;d<7;d++){
-    const isToday=d===todayDow;
-    html+=`<div class="day-row ${isToday?'today-row':''}"><span class="day-name">${DAYS[d]}${isToday?' •':''}</span><div class="day-chips">`;
-    sections.forEach(sec=>{
-      const on=(schedule[d]||[]).includes(sec.id);
-      html+=`<span class="sec-chip ${on?'on':'off'}" onclick="toggleSchedule(${d},'${sec.id}',this)" title="${sec.name}">${sec.icon} ${sec.name}</span>`;
+
+function renderSectionTabs() {
+    const secoes = getSecoes();
+    let html = '';
+    secoes.forEach(s => {
+        html += `<button class="tab-btn" onclick="scrollToSection(${s.id})">${s.icon} ${s.nome}</button>`;
     });
-    html+=`</div></div>`;
-  }
-  html+=`</div>`;
-  document.getElementById('admin-agenda').innerHTML=html;
+    document.getElementById('sectionTabs').innerHTML = html;
 }
-function toggleSchedule(dow,secId,chipEl){
-  const schedule=getSchedule();
-  const arr=schedule[dow]||[];
-  const idx=arr.indexOf(secId);
-  if(idx>=0)arr.splice(idx,1);
-  else arr.push(secId);
-  schedule[dow]=arr;
-  saveSchedule(schedule);
-  chipEl.classList.toggle('on');
-  chipEl.classList.toggle('off');
-  const todayDow=new Date(currentDate+'T12:00:00').getDay();
-  if(dow===todayDow){
-    renderAllPanels();
-  }
+
+function toggleItem(id) {
+    const estado = getEstado();
+    estado[id] = !estado[id];
+    salvarEstado(estado);
 }
-function renderItemEditor(){
-  const sections=getSections();
-  const items=getItems();
-  const tabColors={abertura:'tag-abertura',mep:'tag-mep',operacao:'tag-operacao',fechamento:'tag-fechamento'};
-  const tabNames={abertura:'Abertura',mep:'MEP',operacao:'Operação',fechamento:'Fechamento'};
-  let html=`<div class="add-sec-card"><h4>🔍 Buscar Itens</h4><div class="add-sec-form"><input type="text" id="searchInput" placeholder="Digite para buscar..." oninput="searchItems()" style="padding:8px;border:1px solid #ddd;border-radius:6px;width:100%;color:#000"></div></div>`;
-  html+=`<div class="add-sec-card"><h4>➕ Nova Seção</h4><div class="add-sec-form"><div class="add-sec-row"><input type="text" id="newSecIcon" placeholder="Ícone" style="max-width:80px"><input type="text" id="newSecName" placeholder="Nome"></div><div class="add-sec-row"><select id="newSecTab"><option>Abertura</option><option>MEP</option><option>Operação</option><option>Fechamento</option></select></div><button class="btn-add-sec" onclick="addSection()">Criar</button></div></div>`;
-  sections.sort((a,b)=>a.order-b.order).forEach(sec=>{
-    const secItems=items.filter(i=>i.sec===sec.id).sort((a,b)=>a.order-b.order);
-    const tagClass=tabColors[sec.tab]||'';
-    html+=`<div class="sec-ed-card"><div class="sec-ed-hdr collapsed" onclick="toggleSecEd(this)"><span class="sec-ed-icon">${sec.icon}</span><span class="sec-ed-name">${esc(sec.name)}</span><span class="sec-ed-tag ${tagClass}">${tabNames[sec.tab]||sec.tab}</span><button class="btn-del-sec" onclick="deleteSection(event,'${sec.id}')">🗑️</button><span class="sec-ed-chev">▼</span></div><div class="sec-ed-body">`;
-    secItems.forEach(item=>{
-      html+=`<div class="edit-item-row"><span class="edit-item-text">${esc(item.text)}</span>${item.type==='temperature'?'<span class="temp-badge">🌡️</span>':''}<button class="btn-icon" onclick="openEditModal('${item.id}')">✏️</button><button class="btn-icon" onclick="deleteItem('${item.id}')">🗑️</button></div>`;
-    });
-    html+=`<div class="add-item-area"><div class="add-item-form"><input class="add-item-input" type="text" id="newItem_${sec.id}" placeholder="Novo item..." onkeydown="if(event.key==='Enter')addItem('${sec.id}')"><button class="btn-add-item" onclick="addItem('${sec.id}')">+ Add</button></div><label class="add-item-opts"><input type="checkbox" id="newItemTemp_${sec.id}"> 🌡️ Temperatura</label></div>`;
-    html+=`</div></div>`;
-  });
-  document.getElementById('admin-itens').innerHTML=html;
+
+function setTemp(id, valor) {
+    const estado = getEstado();
+    estado[`temp_${id}`] = parseFloat(valor) || 0;
+    salvarEstado(estado);
 }
-function toggleSecEd(hdr){
-  const body=hdr.nextElementSibling;
-  hdr.classList.toggle('collapsed');
-  body.classList.toggle('open');
-}
-function addSection(){
-  const icon=document.getElementById('newSecIcon').value.trim()||'📌';
-  const name=document.getElementById('newSecName').value.trim();
-  const tabName=document.getElementById('newSecTab').value.toLowerCase();
-  if(!name)return;
-  const sections=getSections();
-  const id='sec_'+Date.now();
-  sections.push({id,name,icon,tab:tabName,order:sections.length});
-  saveSections(sections);
-  const schedule=getSchedule();
-  for(let d=0;d<7;d++){
-    if(!schedule[d])schedule[d]=[];
-    schedule[d].push(id);
-  }
-  saveSchedule(schedule);
-  document.getElementById('newSecIcon').value='';
-  document.getElementById('newSecName').value='';
-  renderAdmin();
-  renderAllPanels();
-}
-function deleteSection(event,secId){
-  event.stopPropagation();
-  const sections=getSections();
-  const sec=sections.find(s=>s.id===secId);
-  if(!confirm(`Excluir seção "${sec?.name}"?`))return;
-  const newSections=sections.filter(s=>s.id!==secId);
-  const newItems=getItems().filter(i=>i.sec!==secId);
-  saveSections(newSections);
-  saveItems(newItems);
-  const schedule=getSchedule();
-  for(let d=0;d<7;d++){
-    if(schedule[d])schedule[d]=schedule[d].filter(id=>id!==secId);
-  }
-  saveSchedule(schedule);
-  renderAdmin();
-  renderAllPanels();
-}
-function addItem(secId){
-  const input=document.getElementById('newItem_'+secId);
-  const text=input.value.trim();
-  if(!text)return;
-  const isTemp=document.getElementById('newItemTemp_'+secId).checked;
-  const items=getItems();
-  const secItems=items.filter(i=>i.sec===secId);
-  items.push({id:'item_'+Date.now(),text,sec:secId,type:isTemp?'temperature':'default',order:secItems.length});
-  saveItems(items);
-  input.value='';
-  document.getElementById('newItemTemp_'+secId).checked=false;
-  renderAdmin();
-  renderAllPanels();
-}
-function deleteItem(itemId){
-  const items=getItems();
-  const item=items.find(i=>i.id===itemId);
-  if(!confirm(`Excluir "${item?.text}"?`))return;
-  saveItems(items.filter(i=>i.id!==itemId));
-  if(dayState.checks[itemId]){
-    delete dayState.checks[itemId];
-    saveState();
-  }
-  renderAdmin();
-  renderAllPanels();
-}
-let _editingItemId=null;
-function openEditModal(itemId){
-  const items=getItems();
-  const item=items.find(i=>i.id===itemId);
-  if(!item)return;
-  _editingItemId=itemId;
-  document.getElementById('modalTitle').textContent='Editar item';
-  document.getElementById('modalText').value=item.text;
-  document.getElementById('modalIsTemp').checked=item.type==='temperature';
-  document.getElementById('modalOverlay').classList.add('open');
-}
-function closeModal(){
-  _editingItemId=null;
-  document.getElementById('modalOverlay').classList.remove('open');
-}
-function saveModalItem(){
-  const text=document.getElementById('modalText').value.trim();
-  const isTemp=document.getElementById('modalIsTemp').checked;
-  if(!text||!_editingItemId){
-    closeModal();
-    return;
-  }
-  const items=getItems();
-  const item=items.find(i=>i.id===_editingItemId);
-  if(item){
-    item.text=text;
-    item.type=isTemp?'temperature':'default';
-  }
-  saveItems(items);
-  closeModal();
-  renderAdmin();
-  renderAllPanels();
-}
-document.getElementById('modalOverlay').addEventListener('click',e=>{
-  if(e.target===document.getElementById('modalOverlay'))closeModal();
-});
-function getWhatsappConfig(){
-  const cfg=localStorage.getItem(K_WHATSAPP);
-  return cfg?JSON.parse(cfg):{phone:'',groupName:''};
-}
-function saveWhatsappConfig(cfg){
-  localStorage.setItem(K_WHATSAPP,JSON.stringify(cfg));
-}
-function sendWhatsapp(){
-  saveState();
-  const resp=document.getElementById('resp').value.trim()||'Não informado';
-  const sections=getSections();
-  const items=getItems();
-  const schedule=getSchedule();
-  const dow=new Date(currentDate+'T12:00:00').getDay();
-  const activeSecs=schedule[dow]||[];
-  let msg=`🔥 *CHECKLIST PRAÇA QUENTE*\n`;
-  msg+=`━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-  msg+=`👤 *Responsável:* ${resp}\n`;
-  msg+=`📅 *Data:* ${fmtDate(currentDate)}\n`;
-  if(photos.length>0)msg+=`📸 *Fotos anexadas:* ${photos.length}\n`;
-  msg+=`━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
-  let overallOk=true;
-  TABS.forEach(tab=>{
-    const tabSecs=sections.filter(s=>s.tab===tab&&activeSecs.includes(s.id));
-    const tabItems=items.filter(i=>tabSecs.some(s=>s.id===i.sec));
-    if(tabItems.length===0)return;
-    const done=tabItems.filter(i=>dayState.checks[i.id]?.checked).length;
-    const total=tabItems.length;
-    const pct=Math.round(done/total*100);
-    const status=done===total?'✅':done===0?'❌':'⚠️';
-    if(done<total)overallOk=false;
-    msg+=`${status} *${tab.toUpperCase()}* (${done}/${total} - ${pct}%)\n`;
-    msg+=`${'═'.repeat(30)}\n`;
-    tabItems.forEach(item=>{
-      const isChecked=dayState.checks[item.id]?.checked;
-      const icon=isChecked?'✅':'❌';
-      const st=dayState.checks[item.id]||{};
-      msg+=`${icon} ${item.text}`;
-      if(isChecked&&item.type==='temperature'&&st.temp){
-        msg+=` 🌡️ ${st.temp}°C`;
-        if(st.note)msg+=` (${st.note})`;
-      }
-      msg+='\n';
-    });
-    const obs=dayState.obs[tab];
-    if(obs&&obs.trim()){
-      msg+=`\n📌 *Obs:* ${obs.trim()}\n`;
-    }
-    msg+='\n';
-  });
-  msg+=`━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-  msg+=overallOk?'🏆 *TURNO 100% CONCLUÍDO!*':'⚠️ *ATENÇÃO: HÁ ITENS PENDENTES*';
-  const cfg=getWhatsappConfig();
-  const phone=cfg.phone.trim();
-  const url=phone?`https://wa.me/${phone}?text=`:`https://wa.me/?text=`;
-  window.open(url+encodeURIComponent(msg),'_blank');
-}
-function sharePhotos(){
-  if(photos.length===0){
-    alert('Nenhuma foto para compartilhar');
-    return;
-  }
-  if(!navigator.share){
-    alert('Seu navegador não suporta compartilhamento. Abra no WhatsApp manualmente.');
-    return;
-  }
-  const filesToShare=[];
-  async function prepareShare(){
-    try{
-      for(let i=0;i<Math.min(photos.length,5);i++){
-        const response=await fetch(photos[i]);
-        const blob=await response.blob();
-        const file=new File([blob],`foto_${i+1}.jpg`,{type:'image/jpeg'});
-        filesToShare.push(file);
-      }
-      if(navigator.share){
-        await navigator.share({title:'Fotos - Praça Quente',text:`Fotos do checklist de ${fmtDate(currentDate)}`,files:filesToShare});
-      }else{
-        alert('Compartilhamento não disponível');
-      }
-    }catch(err){
-      console.error('Erro ao compartilhar:',err);
-      alert('Erro ao preparar fotos para compartilhamento');
-    }
-  }
-  prepareShare();
-}
-function savePhoneNumber(){
-  const phone=document.getElementById('waPhone').value.trim();
-  const groupName=document.getElementById('waGroup').value.trim();
-  if(!phone){
-    alert('Adicione um número de WhatsApp válido');
-    return;
-  }
-  saveWhatsappConfig({phone,groupName});
-  alert('✅ Configuração salva!');
-}
-function loadPhoneNumber(){
-  const cfg=getWhatsappConfig();
-  document.getElementById('waPhone').value=cfg.phone||'';
-  document.getElementById('waGroup').value=cfg.groupName||'';
-}
-window.addEventListener('storage',e=>{
-  if(e.key&&(e.key.startsWith('pq_'))){
-    if(currentTab==='admin')renderAdmin();
-    else renderAllPanels();
-    updateProgress();
-  }
-});
-function comprimirImagem(base64,callback){
-  const img=new Image();
-  img.src=base64;
-  img.onload=()=>{
-    const canvas=document.createElement('canvas');
-    let w=img.width,h=img.height;
-    if(w>h){if(w>800){h=Math.round(h*800/w);w=800}}
-    else{if(h>800){w=Math.round(w*800/h);h=800}}
-    canvas.width=w;
-    canvas.height=h;
-    const ctx=canvas.getContext('2d');
-    ctx.drawImage(img,0,0,w,h);
-    callback(canvas.toDataURL('image/jpeg',0.7));
-  };
-}
-function comprimirPhotos(photosArray,callback){
-  let processed=0;
-  const compressed=[];
-  photosArray.forEach((foto,idx)=>{
-    comprimirImagem(foto,resultado=>{
-      compressed[idx]=resultado;
-      processed++;
-      if(processed===photosArray.length)callback(compressed);
-    });
-  });
-}
-function sendWhatsappComFotos(){
-  const cfg=getWhatsappConfig();
-  if(!cfg.phone||cfg.phone.trim()===''){
-    if(confirm('⚠️ Número de WhatsApp não configurado.\n\nVocê deseja configurar agora?')){
-      showTab('admin');
-      showAdminTab('config');
-      document.getElementById('waPhone').focus();
-    }
-    return;
-  }
-  if(photos.length===0){
-    sendWhatsapp();
-    return;
-  }
-  comprimirPhotos(photos,compressed=>{
-    saveState();
-    const resp=document.getElementById('resp').value.trim()||'Não informado';
-    const sections=getSections();
-    const items=getItems();
-    const schedule=getSchedule();
-    const dow=new Date(currentDate+'T12:00:00').getDay();
-    const activeSecs=schedule[dow]||[];
-    let msg=`🔥 *CHECKLIST PRAÇA QUENTE*\n`;
-    msg+=`━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-    msg+=`👤 *Responsável:* ${resp}\n`;
-    msg+=`📅 *Data:* ${fmtDate(currentDate)}\n`;
-    msg+=`📸 *Fotos:* ${compressed.length}\n`;
-    msg+=`━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
-    let overallOk=true;
-    TABS.forEach(tab=>{
-      const tabSecs=sections.filter(s=>s.tab===tab&&activeSecs.includes(s.id));
-      const tabItems=items.filter(i=>tabSecs.some(s=>s.id===i.sec));
-      if(tabItems.length===0)return;
-      const done=tabItems.filter(i=>dayState.checks[i.id]?.checked).length;
-      const total=tabItems.length;
-      const pct=Math.round(done/total*100);
-      const status=done===total?'✅':done===0?'❌':'⚠️';
-      if(done<total)overallOk=false;
-      msg+=`${status} *${tab.toUpperCase()}* (${done}/${total} - ${pct}%)\n`;
-      msg+=`${'═'.repeat(30)}\n`;
-      tabItems.forEach(item=>{
-        const isChecked=dayState.checks[item.id]?.checked;
-        const icon=isChecked?'✅':'❌';
-        const st=dayState.checks[item.id]||{};
-        msg+=`${icon} ${item.text}`;
-        if(isChecked&&item.type==='temperature'&&st.temp){
-          msg+=` 🌡️ ${st.temp}°C`;
-          if(st.note)msg+=` (${st.note})`;
+
+function scrollToSection(secaoId) {
+    const secoes = getSecoes();
+    const secao = secoes.find(s => s.id === secaoId);
+    const container = document.getElementById('checklistContainer');
+    const sections = container.querySelectorAll('.section');
+    sections.forEach((el, idx) => {
+        if (secoes[idx]?.id === secaoId) {
+            el.scrollIntoView({ behavior: 'smooth' });
         }
-        msg+='\n';
-      });
-      const obs=dayState.obs[tab];
-      if(obs&&obs.trim()){
-        msg+=`\n📌 *Obs:* ${obs.trim()}\n`;
-      }
-      msg+='\n';
     });
-    msg+=`━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-    msg+=overallOk?'🏆 *TURNO 100% CONCLUÍDO!*':'⚠️ *ATENÇÃO: HÁ ITENS PENDENTES*';
-    msg+=`\n\n📸 *FOTOS ANEXADAS:*\n`;
-    compressed.forEach((foto,i)=>{
-      msg+=`Foto ${i+1}: ${foto.substring(0,50)}...\n`;
+}
+
+// ========== FOTOS ==========
+function abrirFoto() {
+    document.getElementById('inputFoto').click();
+}
+
+document.getElementById('inputFoto').addEventListener('change', function() {
+    const arquivo = this.files[0];
+    if (!arquivo) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            let w = img.width, h = img.height;
+            if (w > 800) { h = Math.round(h * 800 / w); w = 800; }
+            if (h > 800) { w = Math.round(w * 800 / h); h = 800; }
+            canvas.width = w; canvas.height = h;
+            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+
+            const fotos = getFotos();
+            if (fotos.length < 10) {
+                fotos.push(canvas.toDataURL('image/jpeg', 0.8));
+                salvarFotos(fotos);
+            } else {
+                alert('Máximo de 10 fotos atingido');
+            }
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(arquivo);
+    this.value = '';
+});
+
+function renderFotos() {
+    const fotos = getFotos();
+    let html = '';
+    fotos.forEach((foto, idx) => {
+        html += `<div class="photo-item">
+            <img src="${foto}" onclick="verFoto(${idx})">
+            <button class="photo-delete" onclick="deletarFoto(${idx})">✕</button>
+        </div>`;
     });
-    const phone=cfg.phone.trim();
-    const url=`https://wa.me/${phone}?text=`;
-    window.open(url+encodeURIComponent(msg),'_blank');
-  });
+    document.getElementById('fotoGrid').innerHTML = html;
 }
-function validarTemperatura(input){
-  const val=parseFloat(input.value);
-  if(isNaN(val)||val<=0){
-    input.style.borderColor='#e0b0ae';
-    input.style.backgroundColor='#fff9f9';
-    return;
-  }
-  if(val>8){
-    input.style.borderColor='#e74c3c';
-    input.style.backgroundColor='#ffe0e0';
-  }else{
-    input.style.borderColor='#c0392b';
-    input.style.backgroundColor='#fff9f9';
-  }
+
+function deletarFoto(idx) {
+    const fotos = getFotos();
+    fotos.splice(idx, 1);
+    salvarFotos(fotos);
 }
-function searchItems(){
-  const query=document.getElementById('searchInput').value.toLowerCase();
-  const items=document.querySelectorAll('.edit-item-row');
-  items.forEach(item=>{
-    const text=item.textContent.toLowerCase();
-    item.style.display=text.includes(query)?'flex':'none';
-  });
+
+function verFoto(idx) {
+    const fotos = getFotos();
+    window.open(fotos[idx]);
 }
+
+// ========== PROGRESSO ==========
+function atualizarProgresso() {
+    const estado = getEstado();
+    const itens = getItens().length;
+    const checked = Object.keys(estado).filter(k => !k.startsWith('temp_') && estado[k]).length;
+    const percent = itens > 0 ? Math.round(checked / itens * 100) : 0;
+
+    document.getElementById('progressFill').style.width = percent + '%';
+    document.getElementById('progressText').textContent = `Progresso: ${checked}/${itens} (${percent}%)`;
+}
+
+// ========== WHATSAPP ==========
+function enviarWhatsapp() {
+    const numero = prompt('Número WhatsApp (com país):\nExemplo: 5511999999999');
+    if (!numero) return;
+
+    const nome = document.getElementById('nomeResponsavel').value || 'Responsável';
+    const data = getHoje();
+    const estado = getEstado();
+    const itens = getItens();
+    const secoes = getSecoes();
+
+    let msg = `*☀️ RELATÓRIO PRAÇA QUENTE*\n`;
+    msg += `📅 Data: ${new Date(data).toLocaleDateString('pt-BR')}\n`;
+    msg += `👤 Responsável: ${nome}\n\n`;
+
+    secoes.forEach(secao => {
+        const itensDaSecao = itens.filter(i => i.secao === secao.id);
+        if (itensDaSecao.length === 0) return;
+        msg += `*${secao.icon} ${secao.nome}*\n`;
+        itensDaSecao.forEach(item => {
+            const ok = estado[item.id] ? '✅' : '❌';
+            const temp = estado[`temp_${item.id}`];
+            msg += `${ok} ${item.nome}`;
+            if (temp !== undefined) msg += ` (${temp}°C)`;
+            msg += `\n`;
+        });
+        msg += `\n`;
+    });
+
+    const fotos = getFotos();
+    if (fotos.length > 0) msg += `📸 Fotos anexadas: ${fotos.length}\n`;
+
+    const link = `https://wa.me/${numero}?text=${encodeURIComponent(msg)}`;
+    window.open(link, '_blank');
+
+    if (fotos.length > 0) {
+        setTimeout(() => {
+            let msgFotos = `*📸 Fotos - ${data}*\n\n`;
+            fotos.forEach((_, i) => { msgFotos += `Foto ${i+1} ✓\n`; });
+            const linkFotos = `https://wa.me/${numero}?text=${encodeURIComponent(msgFotos)}`;
+            window.open(linkFotos, '_blank');
+        }, 1500);
+    }
+}
+
+// ========== ADMIN ==========
+function solicitarSenha() {
+    document.getElementById('modalSenha').classList.add('show');
+    document.getElementById('inputSenha').focus();
+}
+
+function verificarSenha() {
+    if (document.getElementById('inputSenha').value === SENHA) {
+        document.getElementById('painelAdmin').style.display = 'block';
+        fecharModal();
+        renderAdmin();
+    } else {
+        alert('Senha incorreta!');
+    }
+}
+
+function fecharModal() {
+    document.getElementById('modalSenha').classList.remove('show');
+    document.getElementById('inputSenha').value = '';
+}
+
+function renderAdmin() {
+    renderSecoes();
+    renderItens();
+}
+
+function renderSecoes() {
+    const secoes = getSecoes();
+    let html = '';
+    secoes.forEach(s => {
+        html += `<div class="section">
+            <input type="text" value="${s.nome}" onchange="updateSecao(${s.id}, this.value)">
+            <input type="text" value="${s.icon}" style="width:50px;" onchange="updateSecaoIcon(${s.id}, this.value)">
+            <button onclick="deleteSecao(${s.id})">Deletar</button>
+        </div>`;
+    });
+    html += `<button onclick="addSecao()" style="width:100%; padding:10px; background:#27ae60; color:white; margin:10px 0;">+ Seção</button>`;
+    document.getElementById('secoesList').innerHTML = html;
+}
+
+function updateSecao(id, nome) {
+    const secoes = getSecoes();
+    const s = secoes.find(x => x.id === id);
+    if (s) s.nome = nome;
+    localStorage.setItem('pq_secoes', JSON.stringify(secoes));
+    renderChecklist();
+    renderSectionTabs();
+}
+
+function updateSecaoIcon(id, icon) {
+    const secoes = getSecoes();
+    const s = secoes.find(x => x.id === id);
+    if (s) s.icon = icon;
+    localStorage.setItem('pq_secoes', JSON.stringify(secoes));
+    renderChecklist();
+    renderSectionTabs();
+}
+
+function deleteSecao(id) {
+    if (confirm('Deletar?')) {
+        const secoes = getSecoes().filter(x => x.id !== id);
+        localStorage.setItem('pq_secoes', JSON.stringify(secoes));
+        renderSecoes();
+        renderChecklist();
+    }
+}
+
+function addSecao() {
+    const secoes = getSecoes();
+    secoes.push({id: Math.max(...secoes.map(x => x.id), 0) + 1, nome: 'Nova', icon: '📋'});
+    localStorage.setItem('pq_secoes', JSON.stringify(secoes));
+    renderSecoes();
+}
+
+function renderItens() {
+    const itens = getItens();
+    const secoes = getSecoes();
+    let html = '';
+    itens.forEach(item => {
+        const secao = secoes.find(x => x.id === item.secao);
+        html += `<div class="section">
+            <strong>${secao ? secao.nome : 'Sem seção'}</strong><br>
+            <input type="text" value="${item.nome}" onchange="updateItem(${item.id}, 'nome', this.value)">
+            <label><input type="checkbox" ${item.temp ? 'checked' : ''} onchange="updateItem(${item.id}, 'temp', this.checked)"> Requer Temp</label>
+            <button onclick="deleteItem(${item.id})">Deletar</button>
+        </div>`;
+    });
+    html += `<button onclick="addItem()" style="width:100%; padding:10px; background:#27ae60; color:white; margin:10px 0;">+ Item</button>`;
+    document.getElementById('itensList').innerHTML = html;
+}
+
+function updateItem(id, field, value) {
+    const itens = getItens();
+    const item = itens.find(x => x.id === id);
+    if (item) item[field] = value;
+    localStorage.setItem('pq_itens', JSON.stringify(itens));
+    renderChecklist();
+    renderItens();
+}
+
+function deleteItem(id) {
+    if (confirm('Deletar?')) {
+        const itens = getItens().filter(x => x.id !== id);
+        localStorage.setItem('pq_itens', JSON.stringify(itens));
+        renderItens();
+        renderChecklist();
+    }
+}
+
+function addItem() {
+    const itens = getItens();
+    itens.push({id: Math.max(...itens.map(x => x.id), 0) + 1, secao: 1, nome: 'Novo', temp: false});
+    localStorage.setItem('pq_itens', JSON.stringify(itens));
+    renderItens();
+}
+
+// ========== AGENDA ==========
+function renderAgenda() {
+    const agenda = JSON.parse(localStorage.getItem('pq_agenda') || '{}');
+    const secoes = getSecoes();
+    const dias = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'];
+
+    let html = '';
+    dias.forEach((dia, idx) => {
+        html += `<div><strong>${dia}</strong><div class="schedule-grid">`;
+        secoes.forEach(secao => {
+            const ativo = !agenda[idx] || agenda[idx].includes(secao.id);
+            html += `<button class="day-btn ${ativo ? 'active' : ''}" onclick="toggleAgenda(${idx}, ${secao.id})">${secao.icon}</button>`;
+        });
+        html += `</div></div>`;
+    });
+
+    document.getElementById('agendaContainer').innerHTML = html;
+}
+
+function toggleAgenda(dia, secaoId) {
+    const agenda = JSON.parse(localStorage.getItem('pq_agenda') || '{}');
+    if (!agenda[dia]) agenda[dia] = getSecoes().map(x => x.id);
+
+    const idx = agenda[dia].indexOf(secaoId);
+    if (idx > -1) agenda[dia].splice(idx, 1);
+    else agenda[dia].push(secaoId);
+
+    localStorage.setItem('pq_agenda', JSON.stringify(agenda));
+    renderAgenda();
+}
+
+// ========== NAVEGAÇÃO ==========
+function switchTab(tabId, btn) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
+    document.getElementById(tabId).classList.add('active');
+    btn.classList.add('active');
+
+    if (tabId === 'agenda') renderAgenda();
+}
+
+function mudarData() {
+    renderChecklist();
+    renderFotos();
+    atualizarProgresso();
+}
+
+// ========== INICIALIZAR ==========
+document.getElementById('dataAtual').valueAsDate = new Date();
+carregarDados();
+renderChecklist();
+renderSectionTabs();
+renderFotos();
+atualizarProgresso();
+
+// Sincronizar entre abas
+window.addEventListener('storage', () => {
+    renderChecklist();
+    renderFotos();
+    atualizarProgresso();
+});
+
+// Salvar ao sair
+window.addEventListener('beforeunload', () => {
+    salvarDados();
+});
 </script>
+
 </body>
 </html>
