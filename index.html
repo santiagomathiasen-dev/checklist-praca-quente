@@ -2,917 +2,357 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#16a865">
-<meta name="description" content="Sistema de checklist para gestão de praça quente em restaurantes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Praça Quente">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="description" content="Checklist operacional Praça Quente">
+<meta name="theme-color" content="#c0392b">
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-192.png">
-<title>Checklist — Praça Quente</title>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%23c0392b' width='180' height='180'/><text x='50%' y='50%' font-size='100' fill='white' text-anchor='middle' dominant-baseline='middle'>🔥</text></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%23c0392b' width='180' height='180'/><text x='50%' y='50%' font-size='100' fill='white' text-anchor='middle' dominant-baseline='middle'>🔥</text></svg>">
+<title>Checklist Praça Quente</title>
 <style>
-:root{
-  --g:#16a865;--g2:#0d7a49;--gl:#e6f7f0;
-  --am:#e8930a;--aml:#fdf3e3;
-  --rd:#d94040;--rdl:#fdeaea;
-  --bl:#2563d4;--bll:#eef3fd;
-  --bg:#f5f4f0;--card:#fff;--text:#18180f;--muted:#7d7c74;
-  --border:#e5e3db;--radius:14px;--rsm:9px;
-}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
-.screen{display:none;min-height:100vh;flex-direction:column}
-.screen.active{display:flex}
-#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:#18180f;color:#fff;font-size:13px;padding:10px 18px;border-radius:20px;opacity:0;transition:all .3s;pointer-events:none;z-index:999;white-space:nowrap}
-#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-
-/* ── LOGIN ── */
-#login{background:var(--g);justify-content:flex-end;padding:0}
-.lhero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.5rem 1rem;text-align:center}
-.licon{width:72px;height:72px;background:rgba(255,255,255,.15);border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;font-size:32px}
-.lhero h1{font-size:26px;font-weight:700;color:#fff;margin-bottom:6px}
-.lhero p{font-size:14px;color:rgba(255,255,255,.75)}
-.lsheet{background:var(--card);border-radius:24px 24px 0 0;padding:1.75rem 1.5rem calc(1.75rem + env(safe-area-inset-bottom))}
-.fl{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:6px}
-input.field,select.field{width:100%;border:1.5px solid var(--border);border-radius:var(--rsm);padding:13px 14px;font-family:inherit;font-size:15px;color:var(--text);background:var(--bg);outline:none;transition:border-color .2s;-webkit-appearance:none;appearance:none}
-input.field:focus,select.field:focus{border-color:var(--g)}
-.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.tbtn{border:1.5px solid var(--border);border-radius:var(--rsm);padding:11px 6px;font-family:inherit;font-size:12px;font-weight:600;background:var(--bg);color:var(--muted);cursor:pointer;text-align:center;transition:all .15s;line-height:1.4}
-.tbtn.sel{border-color:var(--g);background:var(--gl);color:var(--g2)}
-.sec-sel-wrap{display:flex;flex-direction:column;gap:6px}
-.sec-sel-opt{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--rsm);cursor:pointer;transition:all .15s;background:var(--bg)}
-.sec-sel-opt.sel{border-color:var(--g);background:var(--gl)}
-.sec-sel-dot{width:16px;height:16px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;transition:all .15s;display:flex;align-items:center;justify-content:center}
-.sec-sel-opt.sel .sec-sel-dot{border-color:var(--g);background:var(--g)}
-.sec-sel-opt.sel .sec-sel-dot::after{content:'';width:6px;height:6px;border-radius:50%;background:#fff;display:block}
-.sec-sel-label{font-size:13px;font-weight:500;color:var(--text)}
-.sec-sel-sub{font-size:11px;color:var(--muted);margin-top:1px}
-.brow{display:flex;gap:8px;margin-top:1.25rem}
-.bp{flex:1;padding:14px;border-radius:var(--rsm);border:none;background:var(--g);color:#fff;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;transition:opacity .15s}
-.bp:disabled{opacity:.35;cursor:not-allowed}
-.bp:active:not(:disabled){opacity:.85}
-.badm{padding:14px 18px;border-radius:var(--rsm);border:1.5px solid var(--border);background:none;font-family:inherit;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap}
-.fgroup{margin-top:1.25rem}
-
-/* ── MODAL SENHA ── */
-.modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:1000;padding:1rem}
-.modal.show{display:flex}
-.modal-content{background:var(--card);border-radius:var(--radius);padding:1.5rem;width:100%;max-width:360px;text-align:center}
-.modal-content h3{font-size:18px;margin-bottom:8px}
-.modal-content p{font-size:13px;color:var(--muted);margin-bottom:1rem}
-.modal-content input{width:100%;border:1.5px solid var(--border);border-radius:var(--rsm);padding:12px 14px;font-family:'JetBrains Mono',monospace;font-size:15px;text-align:center;margin-bottom:1rem;outline:none}
-.modal-content input:focus{border-color:var(--g)}
-.modal-btns{display:flex;gap:8px}
-.modal-btns button{flex:1;padding:12px;border-radius:var(--rsm);border:none;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer}
-.modal-btns .btn-cancel{background:var(--bg);color:var(--muted);border:1.5px solid var(--border)}
-.modal-btns .btn-ok{background:var(--g);color:#fff}
-
-/* ── NAV ── */
-.nav{background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 1rem;height:56px;gap:10px;position:sticky;top:0;z-index:10;flex-shrink:0}
-.nbk{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--border);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.nbk svg{width:16px;height:16px;stroke:var(--text);fill:none;stroke-width:2.5}
-.ntit{flex:1;min-width:0}
-.ntit h2{font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ntit p{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.nbtn{font-size:12px;font-weight:600;color:var(--g);border:1.5px solid var(--g);border-radius:20px;padding:5px 12px;background:none;cursor:pointer;white-space:nowrap;flex-shrink:0}
-
-/* ── PROGRESS ── */
-.prog{background:var(--card);padding:12px 1rem;border-bottom:1px solid var(--border);flex-shrink:0}
-.prow{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
-.plbl{font-size:12px;color:var(--muted)}
-.ppct{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;color:var(--g)}
-.ptrack{height:5px;background:var(--border);border-radius:3px;overflow:hidden}
-.pfill{height:100%;background:var(--g);border-radius:3px;transition:width .35s ease}
-
-/* ── CHECKLIST ── */
-#checklist{background:var(--bg)}
-.chkbody{flex:1;overflow-y:auto;padding:.75rem;padding-bottom:130px}
-.sec{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);margin-bottom:8px;overflow:hidden}
-.shead{display:flex;align-items:center;gap:10px;padding:13px 14px;cursor:pointer;user-select:none;-webkit-user-select:none}
-.semoji{font-size:17px;flex-shrink:0;width:24px;text-align:center}
-.sinfo{flex:1;min-width:0}
-.sname{font-size:13px;font-weight:600}
-.scnt{font-size:11px;color:var(--muted);margin-top:1px}
-.sbadge{font-size:10px;font-weight:600;padding:3px 8px;border-radius:20px;flex-shrink:0}
-.bm{background:var(--bll);color:var(--bl)}
-.bt{background:var(--aml);color:var(--am)}
-.be{background:var(--rdl);color:var(--rd)}
-.schev{color:var(--muted);font-size:10px;transition:transform .2s;flex-shrink:0}
-.schev.open{transform:rotate(90deg)}
-.sitems{display:none;border-top:1px solid var(--border)}
-.sitems.open{display:block}
-
-.citem{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border-bottom:1px solid var(--bg);cursor:pointer;transition:background .1s;-webkit-user-select:none;user-select:none}
-.citem:last-child{border-bottom:none}
-.citem:active{background:var(--bg)}
-.cbox{width:22px;height:22px;border-radius:7px;border:2px solid var(--border);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .15s}
-.cbox.done{background:var(--g);border-color:var(--g)}
-.cbox.done::after{content:'';display:block;width:5px;height:9px;border:2.5px solid #fff;border-top:none;border-left:none;transform:rotate(45deg) translateY(-1px)}
-.ctxt{font-size:13px;line-height:1.55;color:var(--text);transition:color .15s;padding-top:1px}
-.ctxt.done{color:var(--muted);text-decoration:line-through}
-
-.titem{display:flex;flex-direction:column;gap:8px;padding:12px 14px;border-bottom:1px solid var(--bg)}
-.titem:last-child{border-bottom:none}
-.titem-top{display:flex;align-items:flex-start;gap:10px}
-.titem-icon{width:28px;height:28px;border-radius:8px;background:#eef3fd;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
-.titem-label{font-size:13px;line-height:1.5;color:var(--text);flex:1;padding-top:4px}
-.titem-label.done{color:var(--muted)}
-.titem-input-row{display:flex;align-items:center;gap:8px;margin-left:38px}
-.titem-input-wrap{display:flex;align-items:center;border:1.5px solid var(--border);border-radius:var(--rsm);background:var(--bg);overflow:hidden;transition:border-color .2s;flex:1;max-width:180px}
-.titem-input-wrap.filled{border-color:var(--g);background:var(--gl)}
-.titem-input-wrap.warn{border-color:var(--am)!important;background:var(--aml)!important}
-.titem-input-wrap.danger{border-color:var(--rd)!important;background:var(--rdl)!important}
-.titem-num{border:none;background:transparent;font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:500;color:var(--text);width:80px;padding:10px 8px 10px 12px;outline:none;text-align:right}
-.titem-unit{font-size:14px;color:var(--muted);padding-right:12px;font-weight:600}
-.titem-status{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;white-space:nowrap}
-.titem-status.ok{background:var(--gl);color:var(--g2)}
-.titem-status.warn{background:var(--aml);color:var(--am)}
-.titem-status.danger{background:var(--rdl);color:var(--rd)}
-.titem-status.empty{background:var(--bg);color:var(--muted)}
-.titem-ref{font-size:10px;color:var(--muted);margin-left:38px}
-
-/* ── FINISH BAR ── */
-.fbar{position:fixed;bottom:0;left:0;right:0;padding:10px 1rem calc(10px + env(safe-area-inset-bottom));background:var(--card);border-top:1px solid var(--border);display:flex;gap:8px;z-index:10}
-.bwa{flex:1;padding:13px 8px;border-radius:var(--rsm);border:none;background:#25D366;color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:opacity .2s;opacity:.35}
-.bwa svg{width:18px;height:18px;fill:#fff;flex-shrink:0}
-.bfin{flex:1;padding:13px;border-radius:var(--rsm);border:none;background:var(--g);color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .2s;opacity:.4}
-
-/* ── DONE ── */
-#done{background:var(--bg);align-items:center;justify-content:center;padding:2rem 1.5rem;overflow-y:auto}
-.dcard{background:var(--card);border-radius:20px;padding:2rem 1.5rem;width:100%;max-width:400px;text-align:center}
-.dcirc{width:68px;height:68px;background:var(--gl);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem}
-.dcirc svg{width:34px;height:34px;stroke:var(--g);fill:none;stroke-width:2.5}
-.dcard h2{font-size:21px;font-weight:700;margin-bottom:6px}
-.dcard>p{font-size:13px;color:var(--muted);margin-bottom:1.5rem}
-.dstats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1.5rem}
-.sbox{background:var(--bg);border-radius:var(--rsm);padding:14px 10px}
-.sval{font-size:26px;font-weight:700;color:var(--g)}
-.slbl{font-size:11px;color:var(--muted);margin-top:2px}
-.waprev{background:#e9fde9;border:1px solid #b2ddb2;border-radius:var(--rsm);padding:12px 14px;text-align:left;margin-bottom:14px;font-size:12px;line-height:1.6;color:#1a3a1a;font-family:'JetBrains Mono',monospace;white-space:pre-wrap;word-break:break-word;max-height:200px;overflow-y:auto}
-.bwafull{width:100%;padding:14px;border-radius:var(--rsm);border:none;background:#25D366;color:#fff;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px;transition:opacity .15s}
-.bwafull svg{width:20px;height:20px;fill:#fff}
-.bwafull:active{opacity:.85}
-.bout{width:100%;padding:13px;border-radius:var(--rsm);border:1.5px solid var(--border);background:none;font-family:inherit;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer}
-
-/* ── HISTORY ── */
-#history{background:var(--bg)}
-.hbody{flex:1;overflow-y:auto;padding:.75rem;padding-bottom:2rem}
-.hempty{text-align:center;padding:4rem 1rem;color:var(--muted);font-size:14px}
-.hitem{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);padding:14px;margin-bottom:8px}
-.htop{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px}
-.hname{font-size:14px;font-weight:600}
-.hdate{font-size:11px;color:var(--muted);text-align:right;flex-shrink:0;margin-left:8px}
-.hturno{font-size:12px;color:var(--muted);margin-bottom:8px}
-.hbrow{display:flex;align-items:center;gap:8px}
-.hbtrack{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
-.hbfill{height:100%;background:var(--g);border-radius:3px}
-.hbpct{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--g);font-weight:500}
-.hitext{font-size:11px;color:var(--muted)}
-.hwabtn{margin-top:10px;width:100%;padding:9px;border-radius:var(--rsm);border:none;background:#25D366;color:#fff;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
-.hwabtn svg{width:14px;height:14px;fill:#fff}
-
-/* ── ADMIN ── */
-#admin{background:var(--bg)}
-.abody{flex:1;overflow-y:auto;padding:.75rem;padding-bottom:2rem}
-.acfg{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);padding:14px;margin-bottom:10px}
-.acfg h3{font-size:13px;font-weight:600;margin-bottom:8px}
-.acfg p{font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.5}
-.warow{display:flex;gap:8px}
-.warow input{flex:1;border:1.5px solid var(--border);border-radius:var(--rsm);padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--text);background:var(--bg);outline:none}
-.warow input:focus{border-color:var(--g)}
-.bsavewa{padding:10px 16px;border-radius:var(--rsm);border:none;background:var(--g);color:#fff;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer}
-.achkwrap{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);padding:14px;margin-bottom:10px}
-.achkname{width:100%;border:1.5px solid var(--border);border-radius:var(--rsm);padding:9px 12px;font-family:inherit;font-size:14px;font-weight:600;background:var(--bg);outline:none;margin-bottom:12px}
-.achkname:focus{border-color:var(--g)}
-.asec{background:var(--bg);border-radius:var(--rsm);border:1px solid var(--border);padding:12px;margin-bottom:8px}
-.asecrow{display:flex;align-items:center;gap:6px;margin-bottom:8px}
-.aemoji{width:42px;border:1.5px solid var(--border);border-radius:var(--rsm);padding:7px;font-size:16px;text-align:center;background:var(--card);outline:none;font-family:inherit}
-.atitle{flex:1;border:1.5px solid var(--border);border-radius:var(--rsm);padding:7px 10px;font-family:inherit;font-size:13px;font-weight:600;background:var(--card);outline:none}
-.atitle:focus,.aemoji:focus{border-color:var(--g)}
-.aturno{border:1.5px solid var(--border);border-radius:var(--rsm);padding:7px 6px;font-family:inherit;font-size:12px;background:var(--card);outline:none;-webkit-appearance:none}
-.aturno:focus{border-color:var(--g)}
-.bdel{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--border);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--rd);font-size:14px;flex-shrink:0}
-.airow{display:flex;align-items:center;gap:6px;padding:6px 0;border-bottom:1px solid var(--border)}
-.airow:last-child{border-bottom:none}
-.airow span.anum{color:var(--muted);font-size:11px;width:18px;flex-shrink:0;text-align:right}
-.airow input{flex:1;border:none;background:none;font-family:inherit;font-size:13px;color:var(--text);outline:none;padding:2px 0}
-.airow .atype{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600;flex-shrink:0}
-.atype.temp{background:#eef3fd;color:var(--bl)}
-.atype.norm{background:var(--bg);color:var(--muted)}
-.aidel{width:22px;height:22px;border-radius:50%;border:1px solid var(--border);background:none;cursor:pointer;font-size:12px;color:var(--muted);flex-shrink:0;display:flex;align-items:center;justify-content:center}
-.baddi{width:100%;padding:8px;border-radius:var(--rsm);border:1.5px dashed var(--border);background:none;font-family:inherit;font-size:12px;color:var(--muted);cursor:pointer;margin-top:8px;transition:all .15s}
-.baddi:hover{border-color:var(--g);color:var(--g)}
-.badds{width:100%;padding:12px;border-radius:var(--radius);border:1.5px dashed var(--border);background:none;font-family:inherit;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;margin-bottom:10px;transition:all .15s}
-.badds:hover{border-color:var(--g);color:var(--g)}
-.abar{background:var(--card);border-top:1px solid var(--border);padding:12px 1rem calc(12px + env(safe-area-inset-bottom));display:flex;gap:8px;flex-shrink:0}
-.bsave{flex:1;padding:14px;border-radius:var(--rsm);border:none;background:var(--g);color:#fff;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer}
-.breset{padding:14px;border-radius:var(--rsm);border:1.5px solid var(--border);background:none;font-family:inherit;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#f0f2f5;min-height:100vh;color:#1a1a2e}
+.header{background:linear-gradient(135deg,#c0392b,#922b21);color:white;padding:14px 14px 10px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.28)}
+.header h1{font-size:1.2rem;font-weight:700;letter-spacing:.3px;display:flex;align-items:center;justify-content:space-between}
+.hdr-btn{background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.3);color:white;border-radius:8px;padding:6px 10px;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .2s}
+.hdr-btn:active{background:rgba(255,255,255,.3)}
+.hdr-sub{font-size:.72rem;opacity:.78;margin:1px 0 9px}
+.hdr-fields{display:flex;gap:8px;margin-bottom:9px}
+.hdr-field{flex:1;display:flex;flex-direction:column;gap:3px}
+.hdr-field label{font-size:.63rem;opacity:.8;font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+.hdr-field input{border:1.5px solid rgba(255,255,255,.35);border-radius:7px;padding:6px 9px;font-size:.82rem;color:white;background:rgba(255,255,255,.15);outline:none;width:100%}
+.hdr-field input::placeholder{color:rgba(255,255,255,.55)}
+.hdr-field input:focus{border-color:rgba(255,255,255,.75);background:rgba(255,255,255,.22)}
+.hdr-field input[type=date]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.7;cursor:pointer}
+.prog-wrap{background:rgba(255,255,255,.22);border-radius:20px;height:7px;overflow:hidden;margin-bottom:3px}
+.prog-bar{height:100%;background:#f9e79f;border-radius:20px;transition:width .35s ease;width:0%}
+.prog-lbl{font-size:.68rem;opacity:.85}
+.tabs{display:flex;overflow-x:auto;background:white;border-bottom:2px solid #ebebeb;scrollbar-width:none;position:sticky;top:127px;z-index:90;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.tabs::-webkit-scrollbar{display:none}
+.tab-btn{flex:1;min-width:62px;padding:9px 4px 8px;font-size:.72rem;font-weight:600;color:#999;border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:2px}
+.tab-btn.active{color:#c0392b;border-bottom-color:#c0392b}
+.tbadge{background:#eee;color:#888;font-size:.58rem;border-radius:10px;padding:1px 5px;transition:all .2s}
+.tab-btn.active .tbadge{background:#fde8e6;color:#c0392b}
+.tab-btn.admin-tab{color:#888}
+.tab-btn.admin-tab.active{color:#555;border-bottom-color:#555}
+.panel{display:none;padding:10px 12px}
+.panel.active{display:block}
+.section{background:white;border-radius:11px;margin-bottom:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.sec-hdr{padding:11px 13px;font-size:.76rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;user-select:none;background:#fafafa;border-bottom:1px solid #f0f0f0}
+.sec-hdr .sc{font-size:.67rem;color:#aaa;font-weight:500;text-transform:none;display:flex;align-items:center;gap:4px}
+.sec-hdr .chev{font-size:.6rem;color:#ccc;transition:transform .2s}
+.sec-hdr.collapsed .chev{transform:rotate(-90deg)}
+.item-list{padding:3px 0}
+.item-list.hidden{display:none}
+.item{display:flex;align-items:flex-start;padding:10px 13px;border-bottom:1px solid #f7f7f7;gap:10px;cursor:pointer;transition:background .15s;-webkit-tap-highlight-color:transparent}
+.item:last-child{border-bottom:none}
+.item:active{background:#fdf5f4}
+.item input[type=checkbox]{display:none}
+.chk{width:22px;height:22px;min-width:22px;border:2px solid #ddd;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:all .2s;background:white;margin-top:1px}
+.item.checked .chk{background:#c0392b;border-color:#c0392b}
+.chk svg{display:none}
+.item.checked .chk svg{display:block}
+.item-body{flex:1;min-width:0}
+.item-text{font-size:.86rem;color:#333;line-height:1.35;transition:color .2s}
+.item.checked .item-text{color:#bbb;text-decoration:line-through}
+.temp-row{display:none;margin-top:6px;align-items:center;gap:7px;flex-wrap:wrap}
+.item.checked .temp-row{display:flex}
+.temp-row label{font-size:.7rem;color:#c0392b;font-weight:700;white-space:nowrap}
+.temp-input{border:1.5px solid #e0b0ae;border-radius:6px;padding:5px 9px;font-size:.83rem;width:100px;outline:none;transition:border-color .2s;background:#fff9f9}
+.temp-input:focus{border-color:#c0392b}
+.temp-unit{font-size:.75rem;color:#aaa}
+.temp-row textarea{border:1.5px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:.8rem;width:100%;resize:none;height:42px;outline:none;font-family:inherit;transition:border-color .2s;margin-top:2px}
+.temp-row textarea:focus{border-color:#c0392b}
+.obs-card{background:white;border-radius:11px;padding:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:10px}
+.obs-card label{font-size:.68rem;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:6px}
+.obs-card textarea{width:100%;border:1.5px solid #e8e8e8;border-radius:8px;padding:8px 10px;font-size:.83rem;font-family:inherit;resize:vertical;min-height:65px;color:#333;outline:none;transition:border-color .2s}
+.obs-card textarea:focus{border-color:#c0392b}
+.photos-card{background:white;border-radius:11px;padding:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:10px}
+.photos-label{font-size:.68rem;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.4px;display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.photo-count{background:#fde8e6;color:#c0392b;border-radius:20px;padding:2px 8px;font-size:.62rem;font-weight:700}
+.photos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px}
+.photo-item{position:relative;border-radius:8px;overflow:hidden;background:#f5f5f5;aspect-ratio:1;cursor:pointer}
+.photo-item img{width:100%;height:100%;object-fit:cover}
+.photo-del{position:absolute;top:2px;right:2px;background:#e74c3c;color:white;border:none;border-radius:50%;width:22px;height:22px;font-size:.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.photo-del:active{opacity:.8}
+.photos-empty{text-align:center;color:#bbb;font-size:.8rem;padding:16px 12px}
+#photoInput{display:none}
+.all-done{display:none;background:#e8f8f5;color:#1e8449;border:1px solid #a9dfbf;border-radius:8px;padding:9px 13px;font-size:.8rem;font-weight:600;text-align:center;margin-bottom:10px}
+.rules-banner{background:#fef9e7;border-left:4px solid #f39c12;border-radius:0 8px 8px 0;padding:9px 12px;margin-bottom:10px;font-size:.76rem;line-height:1.55;color:#7d6608}
+.rules-banner strong{color:#b7770d}
+.empty-day{text-align:center;padding:24px 12px;color:#bbb}
+.ed-icon{font-size:2.5rem;margin-bottom:8px}
+.agenda-card{background:white;border-radius:11px;padding:13px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:10px}
+.agenda-card-title{font-size:.72rem;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.3px;margin-bottom:10px}
+.day-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f0f0f0}
+.day-row:last-child{border-bottom:none}
+.day-row.today-row{background:#fef9e7;padding:9px 8px;margin:0 -8px;border-radius:6px}
+.day-name{font-size:.76rem;font-weight:700;color:#555;min-width:40px}
+.day-row.today-row .day-name{color:#c0392b}
+.day-chips{display:flex;gap:5px;flex-wrap:wrap}
+.sec-chip{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;cursor:pointer;transition:all .2s;border:1.5px solid #e0e0e0;background:white;font-size:.9rem}
+.sec-chip.on{background:#c0392b;color:white;border-color:#c0392b}
+.sec-chip.off{background:#f5f5f5;color:#999}
+.admin-sub-tabs{display:flex;gap:6px;background:white;padding:8px 12px;border-bottom:1px solid #ebebeb;border-radius:8px 8px 0 0;margin-bottom:10px;overflow-x:auto}
+.admin-sub-tabs::-webkit-scrollbar{height:4px}
+.ast-btn{padding:7px 12px;font-size:.76rem;font-weight:600;border:none;background:white;color:#999;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s}
+.ast-btn.active{color:#c0392b;border-bottom-color:#c0392b;background:#fdf5f4}
+.admin-content{display:none}
+.admin-content.open{display:block}
+.add-sec-card{background:white;border-radius:11px;padding:13px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:10px}
+.add-sec-card h4{font-size:.76rem;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px}
+.add-sec-form{display:flex;flex-direction:column;gap:8px}
+.add-sec-row{display:flex;gap:7px}
+.add-sec-row input,.add-sec-row select{flex:1;border:1.5px solid #e0e0e0;border-radius:7px;padding:7px 10px;font-size:.82rem;outline:none;transition:border-color .2s;min-width:0}
+.add-sec-row input:focus,.add-sec-row select:focus{border-color:#c0392b}
+.btn-add-sec{width:100%;padding:9px;background:#27ae60;color:white;border:none;border-radius:8px;font-size:.84rem;font-weight:700;cursor:pointer}
+.sec-ed-card{background:white;border-radius:11px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:10px}
+.sec-ed-hdr{padding:10px 12px;background:#fafafa;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none;transition:background .15s}
+.sec-ed-hdr:active{background:#f5f5f5}
+.sec-ed-icon{font-size:1rem}
+.sec-ed-name{flex:1;font-size:.8rem;font-weight:600;color:#333}
+.sec-ed-tag{font-size:.62rem;padding:2px 8px;border-radius:12px;font-weight:600;text-transform:uppercase}
+.tag-abertura{background:#fff3e0;color:#e65100}
+.tag-mep{background:#f3e5f5;color:#6a1b9a}
+.tag-operacao{background:#e8f5e9;color:#1b5e20}
+.tag-fechamento{background:#ede7f6;color:#3d3399}
+.btn-del-sec{background:#e74c3c;color:white;border:none;border-radius:4px;padding:4px 8px;font-size:.7rem;cursor:pointer}
+.sec-ed-chev{color:#ccc;font-size:.6rem;transition:transform .2s}
+.sec-ed-hdr.collapsed .sec-ed-chev{transform:rotate(-90deg)}
+.sec-ed-body{padding:8px 12px;display:none}
+.sec-ed-body.open{display:block}
+.edit-item-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:.8rem}
+.edit-item-row:last-child{border-bottom:none}
+.edit-item-text{flex:1;color:#333}
+.temp-badge{background:#fde8e6;color:#c0392b;font-size:.6rem;padding:2px 6px;border-radius:4px;font-weight:600}
+.btn-icon{background:none;border:none;font-size:.8rem;cursor:pointer;padding:4px;opacity:.7;transition:opacity .2s}
+.btn-icon:active{opacity:1}
+.add-item-area{padding:10px 0;border-top:1px solid #f0f0f0;margin-top:8px}
+.add-item-form{display:flex;gap:6px;margin-bottom:8px}
+.add-item-input{flex:1;border:1.5px solid #e0e0e0;border-radius:6px;padding:6px 9px;font-size:.8rem;outline:none}
+.add-item-input:focus{border-color:#c0392b}
+.btn-add-item{padding:6px 10px;background:#c0392b;color:white;border:none;border-radius:6px;font-size:.78rem;font-weight:700;cursor:pointer;white-space:nowrap}
+.add-item-opts{display:flex;align-items:center;gap:5px;font-size:.72rem;color:#888;cursor:pointer}
+.add-item-opts input{cursor:pointer;width:14px;height:14px}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:flex-end;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:white;border-radius:20px 20px 0 0;padding:20px 16px 28px;width:100%;max-height:80vh;overflow-y:auto}
+.modal h3{font-size:.98rem;font-weight:700;margin-bottom:14px;color:#333}
+.modal-field{margin-bottom:11px}
+.modal-field label{font-size:.7rem;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:5px}
+.modal-field input,.modal-field select{width:100%;border:1.5px solid #e0e0e0;border-radius:8px;padding:9px 11px;font-size:.85rem;outline:none;transition:border-color .2s}
+.modal-field input:focus,.modal-field select:focus{border-color:#c0392b}
+.modal-check{display:flex;align-items:center;gap:8px;font-size:.83rem;color:#555;cursor:pointer}
+.modal-check input{width:16px;height:16px;cursor:pointer}
+.modal-btns{display:flex;gap:8px;margin-top:16px}
+.modal-btns button{flex:1;padding:11px;border:none;border-radius:9px;font-size:.88rem;font-weight:700;cursor:pointer}
+.btn-confirm{background:#c0392b;color:white}
+.btn-cancel{background:#f0f0f0;color:#666}
+.spacer{height:64px}
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:white;padding:10px 13px;box-shadow:0 -2px 12px rgba(0,0,0,.1);display:flex;gap:8px;z-index:200}
+.btn-reset{flex:0 0 auto;padding:11px 13px;border:1.5px solid #ddd;border-radius:9px;background:white;color:#888;font-size:.84rem;font-weight:600;cursor:pointer;transition:background .15s}
+.btn-reset:active{background:#f5f5f5}
+.btn-wa{flex:1;padding:11px;background:linear-gradient(135deg,#25D366,#128C7E);color:white;border:none;border-radius:9px;font-size:.88rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:opacity .2s}
+.btn-wa:active{opacity:.85}
+.btn-wa svg{width:18px;height:18px;flex-shrink:0}
+.sw-status{position:fixed;bottom:70px;right:12px;background:#4caf50;color:white;padding:6px 12px;border-radius:6px;font-size:.7rem;font-weight:600;z-index:150;display:none}
 </style>
 </head>
 <body>
-<div id="toast"></div>
-
-<!-- ══ MODAL SENHA ══ -->
-<div class="modal" id="modal-senha">
-  <div class="modal-content">
-    <h3>🔒 Acesso Admin</h3>
-    <p>Digite a senha para acessar o painel de administração</p>
-    <input type="password" id="inp-senha" placeholder="Digite a senha" autocomplete="off">
+<div class="header">
+  <div>
+    <h1>🔥 Praça Quente</h1>
+    <div class="hdr-sub">Checklist Operacional</div>
+  </div>
+  <button class="hdr-btn" id="photoBtn" onclick="openPhotoInput()" title="Adicionar foto">📸</button>
+</div>
+<div class="hdr-fields" style="padding:0 14px 10px">
+  <div class="hdr-field">
+    <label>Responsável</label>
+    <input type="text" id="resp" placeholder="Nome" oninput="saveState()">
+  </div>
+  <div class="hdr-field">
+    <label>Data</label>
+    <input type="date" id="dateInput" onchange="onDateChange()">
+  </div>
+</div>
+<div style="padding:0 14px 10px">
+  <div class="prog-wrap"><div class="prog-bar" id="pb"></div></div>
+  <div class="prog-lbl" id="pl">0 de 0 itens</div>
+</div>
+<div class="tabs" id="mainTabs">
+  <button class="tab-btn active" onclick="showTab('abertura')" id="tab-abertura">Abertura<span class="tbadge" id="badge-abertura">0/0</span></button>
+  <button class="tab-btn" onclick="showTab('mep')" id="tab-mep">MEP<span class="tbadge" id="badge-mep">0/0</span></button>
+  <button class="tab-btn" onclick="showTab('operacao')" id="tab-operacao">Operação<span class="tbadge" id="badge-operacao">0/0</span></button>
+  <button class="tab-btn" onclick="showTab('fechamento')" id="tab-fechamento">Fechamento<span class="tbadge" id="badge-fechamento">0/0</span></button>
+  <button class="tab-btn admin-tab" onclick="showTab('admin')" id="tab-admin">⚙️<span class="tbadge">Config</span></button>
+</div>
+<div id="panel-abertura" class="panel active"></div>
+<div id="panel-mep" class="panel"></div>
+<div id="panel-operacao" class="panel"></div>
+<div id="panel-fechamento" class="panel"></div>
+<div id="panel-admin" class="panel">
+  <div class="admin-sub-tabs">
+    <button class="ast-btn active" id="ast-agenda" onclick="showAdminTab('agenda')">📅 Agenda</button>
+    <button class="ast-btn" id="ast-itens" onclick="showAdminTab('itens')">📋 Itens</button>
+    <button class="ast-btn" id="ast-config" onclick="showAdminTab('config')">💬 WhatsApp</button>
+  </div>
+  <div class="admin-content open" id="admin-agenda"></div>
+  <div class="admin-content" id="admin-itens"></div>
+  <div class="admin-content" id="admin-config">
+    <div class="add-sec-card">
+      <h4>💬 Configurar WhatsApp</h4>
+      <div class="add-sec-form">
+        <div class="add-sec-row">
+          <div style="flex:1">
+            <label style="font-size:.7rem;color:#888;display:block;margin-bottom:4px">Número com código do país (ex: 5511987654321)</label>
+            <input type="text" id="waPhone" placeholder="5511987654321" style="width:100%">
+          </div>
+        </div>
+        <div class="add-sec-row">
+          <div style="flex:1">
+            <label style="font-size:.7rem;color:#888;display:block;margin-bottom:4px">Nome do grupo (opcional)</label>
+            <input type="text" id="waGroup" placeholder="Grupo Praça Quente" style="width:100%">
+          </div>
+        </div>
+        <button class="btn-add-sec" onclick="savePhoneNumber()">✅ Salvar Configuração</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="photosPanel" style="padding:10px 12px;display:none">
+  <div class="photos-card">
+    <div class="photos-label">📸 Fotos do dia <span class="photo-count" id="photoCount">0</span></div>
+    <div id="photosContainer" class="photos-grid"></div>
+  </div>
+</div>
+<div class="spacer"></div>
+<div class="bottom-bar" id="bottomBar">
+  <button class="btn-reset" onclick="resetDay()" title="Limpar dia">🔄</button>
+  <button class="btn-reset" id="sharePhotosBtn" onclick="sharePhotos()" title="Compartilhar fotos" style="display:none">📤 Fotos</button>
+  <button class="btn-wa" onclick="sendWhatsapp()">
+    <svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    Relatório
+  </button>
+</div>
+<input type="file" id="photoInput" accept="image/*" capture="environment" onchange="addPhoto(event)">
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modal">
+    <h3 id="modalTitle">Editar item</h3>
+    <div class="modal-field">
+      <label>Texto do item</label>
+      <input type="text" id="modalText" placeholder="Descrição do item">
+    </div>
+    <label class="modal-check">
+      <input type="checkbox" id="modalIsTemp"> Requer temperatura?
+    </label>
     <div class="modal-btns">
+      <button class="btn-confirm" onclick="saveModalItem()">Salvar</button>
       <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
-      <button class="btn-ok" onclick="checkPassword()">Entrar</button>
     </div>
   </div>
 </div>
-
-<!-- ══ LOGIN ══ -->
-<div class="screen active" id="login">
-  <div class="lhero">
-    <div class="licon">🔥</div>
-    <h1>Praça Quente</h1>
-    <p>Gestão de turnos e qualidade</p>
-  </div>
-  <div class="lsheet">
-    <label class="fl">Seu nome</label>
-    <input class="field" type="text" id="inp-nome" placeholder="Ex: João, Maria..." autocomplete="off" oninput="validateLogin()">
-
-    <div class="fgroup">
-      <label class="fl">Turno</label>
-      <div class="tgrid" id="tgrid"></div>
-    </div>
-
-    <div class="fgroup">
-      <label class="fl">O que você vai preencher?</label>
-      <div class="sec-sel-wrap" id="sec-sel"></div>
-    </div>
-
-    <div class="brow">
-      <button class="bp" id="btn-start" onclick="startChecklist()" disabled>Iniciar ✓</button>
-      <button class="badm" onclick="goAdmin()">⚙️ Admin</button>
-    </div>
-  </div>
-</div>
-
-<!-- ══ CHECKLIST ══ -->
-<div class="screen" id="checklist">
-  <nav class="nav">
-    <button class="nbk" onclick="goTo('login')"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    <div class="ntit">
-      <h2 id="nnome">—</h2>
-      <p id="nturno">—</p>
-    </div>
-    <button class="nbtn" onclick="goTo('history')">Histórico</button>
-  </nav>
-  <div class="prog">
-    <div class="prow"><span class="plbl" id="plbl">Progresso</span><span class="ppct" id="ppct">0%</span></div>
-    <div class="ptrack"><div class="pfill" id="pfill" style="width:0%"></div></div>
-  </div>
-  <div class="chkbody" id="chkbody"></div>
-  <div class="fbar">
-    <button class="bwa" id="bwap" onclick="shareWa(false)">
-      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.477 2 2 6.477 2 12c0 1.821.487 3.53 1.338 5L2 22l5.14-1.323A9.969 9.969 0 0012 22c5.523 0 10-4.477 10-10S17.522 2 12 2zm0 18a8 8 0 01-4.091-1.124l-.291-.174-3.032.78.807-2.944-.19-.302A8 8 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z"/></svg>
-      Enviar parcial
-    </button>
-    <button class="bfin" id="bfin" onclick="finishChecklist()">Finalizar ✓</button>
-  </div>
-</div>
-
-<!-- ══ DONE ══ -->
-<div class="screen" id="done">
-  <div style="display:flex;align-items:center;justify-content:center;flex:1;padding:2rem 1.5rem;overflow-y:auto">
-  <div class="dcard">
-    <div class="dcirc"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-    <h2>Turno finalizado!</h2>
-    <p id="dsub">Checklist concluído.</p>
-    <div class="dstats">
-      <div class="sbox"><div class="sval" id="sdone">0</div><div class="slbl">itens concluídos</div></div>
-      <div class="sbox"><div class="sval" id="spct">0%</div><div class="slbl">do checklist</div></div>
-    </div>
-    <p style="font-size:11px;color:var(--muted);margin-bottom:8px;text-align:left;font-weight:600;text-transform:uppercase;letter-spacing:.05em">Prévia da mensagem</p>
-    <div class="waprev" id="waprev"></div>
-    <button class="bwafull" onclick="shareWa(true)">
-      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.477 2 2 6.477 2 12c0 1.821.487 3.53 1.338 5L2 22l5.14-1.323A9.969 9.969 0 0012 22c5.523 0 10-4.477 10-10S17.522 2 12 2zm0 18a8 8 0 01-4.091-1.124l-.291-.174-3.032.78.807-2.944-.19-.302A8 8 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z"/></svg>
-      Enviar relatório pelo WhatsApp
-    </button>
-    <button class="bout" onclick="novoTurno()">Iniciar novo turno</button>
-  </div>
-  </div>
-</div>
-
-<!-- ══ HISTORY ══ -->
-<div class="screen" id="history">
-  <nav class="nav">
-    <button class="nbk" onclick="goTo('checklist')"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    <div class="ntit"><h2>Histórico</h2><p id="hcount">—</p></div>
-    <button class="nbtn" style="color:var(--rd);border-color:var(--rd)" onclick="clearHistory()">Limpar</button>
-  </nav>
-  <div class="hbody" id="hbody"></div>
-</div>
-
-<!-- ══ ADMIN ══ -->
-<div class="screen" id="admin">
-  <nav class="nav">
-    <button class="nbk" onclick="goTo('login')"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    <div class="ntit"><h2>Painel Admin</h2><p>Editar checklists e configurações</p></div>
-  </nav>
-  <div class="abody" id="abody"></div>
-  <div class="abar">
-    <button class="breset" onclick="resetDefault()">Restaurar padrão</button>
-    <button class="bsave" onclick="saveAdmin()">Salvar ✓</button>
-  </div>
-</div>
-
 <script>
-// ─────────────────────────────────────────────────────────────
-// PWA INSTALLATION
-// ─────────────────────────────────────────────────────────────
-if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('service-worker.js')
-      .then(reg=>console.log('SW registered'))
-      .catch(err=>console.log('SW error',err));
-  });
-}
-
-// ─────────────────────────────────────────────────────────────
-// ADMIN PASSWORD
-// ─────────────────────────────────────────────────────────────
-const ADMIN_PASSWORD='37014520';
-
-function goAdmin(){
-  document.getElementById('modal-senha').classList.add('show');
-  document.getElementById('inp-senha').value='';
-  setTimeout(()=>document.getElementById('inp-senha').focus(),100);
-}
-
-function closeModal(){
-  document.getElementById('modal-senha').classList.remove('show');
-}
-
-function checkPassword(){
-  const pwd=document.getElementById('inp-senha').value;
-  if(pwd===ADMIN_PASSWORD){
-    closeModal();
-    AD=JSON.parse(JSON.stringify(CL));
-    renderAdmin();
-    goTo('admin');
-  } else {
-    toast('❌ Senha incorreta');
-    document.getElementById('inp-senha').value='';
-    document.getElementById('inp-senha').focus();
-  }
-}
-
-// Enter key on password
-document.addEventListener('DOMContentLoaded',()=>{
-  document.getElementById('inp-senha').addEventListener('keypress',e=>{
-    if(e.key==='Enter') checkPassword();
-  });
-});
-
-// ─────────────────────────────────────────────────────────────
-// DEFAULTS
-// ─────────────────────────────────────────────────────────────
-const DEFAULT=[{
-  id:"padrao",name:"Praça Quente — Completo",
-  sections:[
-    {id:"ab",turno:"Manhã",emoji:"☀️",title:"Abertura e mise en place",items:[
-      {t:"check",label:"Verificar uniformes e EPI da equipe"},
-      {t:"check",label:"Lavar as mãos e higienizar bancadas"},
-      {t:"check",label:"Ligar fogão, chapa, forno e fritadeira"},
-      {t:"temp", label:"Câmara fria — temperatura atual",ref:"Ideal: 0 a 4°C",min:-2,max:4},
-      {t:"temp", label:"Freezer — temperatura atual",ref:"Ideal: abaixo de -18°C",min:-30,max:-18},
-      {t:"check",label:"Conferir validade e qualidade dos insumos"},
-      {t:"check",label:"Montar mise en place: temperos, óleos, ervas"},
-      {t:"check",label:"Etiquetar produções: nome, data, responsável"},
-      {t:"check",label:"Pré-aquecer forno para as produções do dia"},
-      {t:"check",label:"Checar nível de gás e reportar anomalias"},
-      {t:"check",label:"Verificar descartáveis, luvas e álcool gel"}
-    ]},
-    {id:"cf",turno:"Manhã",emoji:"☕",title:"Café da manhã",items:[
-      {t:"check",label:"Preparar ovos mexidos / estrelados / pochê"},
-      {t:"check",label:"Fritar bacon e linguiça na chapa"},
-      {t:"check",label:"Preparar tapiocas ou panquecas"},
-      {t:"temp", label:"Mingau / aveia — temperatura de serviço",ref:"Mínimo: 65°C",min:65,max:100},
-      {t:"check",label:"Aquecer pão de queijo e croissant"},
-      {t:"check",label:"Preparar sucos naturais do dia"},
-      {t:"check",label:"Repor buffet ao longo do serviço"},
-      {t:"temp", label:"Banho-maria (proteínas quentes)",ref:"Mínimo: 65°C",min:65,max:100},
-      {t:"check",label:"Higienizar e cortar frutas para exposição"},
-      {t:"check",label:"Registrar sobras no mapa de produção"}
-    ]},
-    {id:"ln",turno:"Manhã",emoji:"🥐",title:"Lanche",items:[
-      {t:"check",label:"Preparar caldo ou sopa do dia"},
-      {t:"check",label:"Fritar ou assar salgados do buffet"},
-      {t:"check",label:"Preparar torradas e pão francês"},
-      {t:"check",label:"Montar frios e queijos"},
-      {t:"temp", label:"Fritadeira — temperatura do óleo",ref:"Ideal: 170 a 180°C",min:170,max:185},
-      {t:"check",label:"Repor café, chá e achocolatado"},
-      {t:"check",label:"Registrar horário e temp. dos alimentos"},
-      {t:"check",label:"Descartar alimentos após 4h de exposição"}
-    ]},
-    {id:"sw",turno:"Manhã",emoji:"🥪",title:"Sanduíches",items:[
-      {t:"check",label:"Mise en place de frios, queijos e pães"},
-      {t:"check",label:"Pré-grelhar pães na chapa (180°C)"},
-      {t:"check",label:"Preparar maionese temperada sob refrigeração"},
-      {t:"check",label:"Higienizar e cortar alface, tomate e cebola"},
-      {t:"check",label:"Linha: pão → proteína → vegetais → molho"},
-      {t:"temp", label:"Frango / hambúrguer — temperatura interna",ref:"Mínimo: 74°C (frango) / 63°C (bovino)",min:63,max:90},
-      {t:"check",label:"Controlar porcionamento conforme ficha técnica"},
-      {t:"check",label:"Limpar chapa entre cada preparação"}
-    ]},
-    {id:"al",turno:"Tarde",emoji:"🍽️",title:"Almoço — Prato Executivo",items:[
-      {t:"check",label:"Preparar arroz branco (per capita 150g)"},
-      {t:"check",label:"Preparar feijão / tutu conforme ficha"},
-      {t:"check",label:"Grelhar / assar proteína principal"},
-      {t:"check",label:"Preparar guarnição quente"},
-      {t:"check",label:"Preparar molho de acompanhamento"},
-      {t:"temp", label:"Balcão térmico — temperatura",ref:"Mínimo: 65°C",min:65,max:90},
-      {t:"check",label:"Verificar tempero e textura antes do serviço"},
-      {t:"check",label:"Montar prato executivo padrão"},
-      {t:"check",label:"Repor sobremesa / fruta no buffet"},
-      {t:"check",label:"Registrar nº de refeições servidas"}
-    ]},
-    {id:"lp",turno:"Tarde",emoji:"🧹",title:"Limpeza e higienização",items:[
-      {t:"check",label:"Limpar e desinfetar bancadas após cada etapa"},
-      {t:"check",label:"Lavar tábuas com detergente e solução clorada"},
-      {t:"check",label:"Trocar pano de chão a cada 2 horas"},
-      {t:"check",label:"Higienizar chapa e fritadeira após cada turno"},
-      {t:"check",label:"Limpar bocas do fogão e queimadores"},
-      {t:"check",label:"Lavar e organizar panelas e utensílios"},
-      {t:"check",label:"Higienizar geladeiras e câmaras frias"},
-      {t:"check",label:"Limpar piso com água quente e detergente"},
-      {t:"check",label:"Trocar sacos do lixo e higienizar lixeiras"},
-      {t:"check",label:"Preencher planilha de controle de limpeza"}
-    ]},
-    {id:"og",turno:"Tarde",emoji:"📦",title:"Organização e estoque",items:[
-      {t:"check",label:"Organizar câmara no sistema PEPS"},
-      {t:"check",label:"Etiquetar recipientes com data/validade"},
-      {t:"check",label:"Embalar e armazenar sobras (máx. 3 dias)"},
-      {t:"check",label:"Gerar pedido de insumos em falta"},
-      {t:"check",label:"Organizar prateleiras secas por categoria"},
-      {t:"check",label:"Verificar embalagens e descartar danificadas"}
-    ]},
-    {id:"en",turno:"Encerramento",emoji:"🔒",title:"Encerramento do turno",items:[
-      {t:"check",label:"Desligar fogão, forno, fritadeira e chapa"},
-      {t:"check",label:"Fechar registro de gás e checar vazamentos"},
-      {t:"check",label:"Embalar e refrigerar todos os alimentos"},
-      {t:"check",label:"Limpeza final de bancadas, piso e equipamentos"},
-      {t:"check",label:"Higienizar pia e ralo com bactericida"},
-      {t:"check",label:"Retirar lixo e higienizar lixeiras"},
-      {t:"check",label:"Conferir extintores e saídas de emergência"},
-      {t:"check",label:"Preencher livro de ocorrências do turno"},
-      {t:"temp", label:"Câmara fria — temperatura final",ref:"Ideal: 0 a 4°C",min:-2,max:4},
-      {t:"temp", label:"Freezer — temperatura final",ref:"Ideal: abaixo de -18°C",min:-30,max:-18},
-      {t:"check",label:"Assinar e entregar checklist ao supervisor"}
-    ]}
-  ]
-}];
-
-// ─────────────────────────────────────────────────────────────
-// STATE
-// ─────────────────────────────────────────────────────────────
-let CL,waNum,hist,chk,temps,openSec,user,turno,cid,selSec,AD;
-
-function load(){
-  try{CL=JSON.parse(localStorage.getItem('cl_lists'));}catch(e){}
-  if(CL){
-    CL.forEach(c=>c.sections.forEach(s=>{
-      s.items=s.items.map(it=>typeof it==='string'?{t:'check',label:it}:it);
-    }));
-  }
-  if(!CL||!CL.length) CL=JSON.parse(JSON.stringify(DEFAULT));
-  try{waNum=localStorage.getItem('cl_wa')||'';}catch(e){waNum='';}
-  try{hist=JSON.parse(localStorage.getItem('cl_hist')||'[]');}catch(e){hist=[];}
-}
-load();
-function saveLS(){try{localStorage.setItem('cl_lists',JSON.stringify(CL));localStorage.setItem('cl_wa',waNum);}catch(e){}}
-function saveHist(){try{localStorage.setItem('cl_hist',JSON.stringify(hist));}catch(e){}}
-
-// ─────────────────────────────────────────────────────────────
-// UTILS
-// ─────────────────────────────────────────────────────────────
-function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
-function goTo(s){
-  document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
-  document.getElementById(s).classList.add('active');
-  if(s==='history') renderHist();
-  if(s==='login'){buildTurnoGrid();buildSecSel();}
-}
-function tEmoji(t){return t==='Manhã'?'🌅':t==='Tarde'?'🌇':t==='Encerramento'?'🌙':'⏰';}
-function badgeClass(t){return t==='Manhã'?'bm':t==='Tarde'?'bt':'be';}
-
-// ─────────────────────────────────────────────────────────────
-// LOGIN
-// ─────────────────────────────────────────────────────────────
-function buildTurnoGrid(){
-  const turnos=[...new Set(CL[0].sections.map(s=>s.turno))];
-  const g=document.getElementById('tgrid');
-  g.innerHTML=turnos.map(t=>`<button class="tbtn" onclick="selTurno(this,'${t}')">${tEmoji(t)} ${t}</button>`).join('');
-}
-
-function buildSecSel(){
-  const secs=CL[0].sections;
-  const wrap=document.getElementById('sec-sel');
-  let html=`<div class="sec-sel-opt sel" onclick="pickSec(this,'__all__')">
-    <div class="sec-sel-dot"></div>
-    <div>
-      <div class="sec-sel-label">Checklist completo</div>
-      <div class="sec-sel-sub">Todas as ${secs.length} seções</div>
-    </div>
-  </div>`;
-  secs.forEach(s=>{
-    const tot=s.items.length;
-    html+=`<div class="sec-sel-opt" onclick="pickSec(this,'${s.id}')">
-      <div class="sec-sel-dot"></div>
-      <div>
-        <div class="sec-sel-label">${s.emoji} ${s.title}</div>
-        <div class="sec-sel-sub">${tot} ${tot===1?'item':'itens'} · ${s.turno}</div>
-      </div>
-    </div>`;
-  });
-  wrap.innerHTML=html;
-  selSec='__all__';
-}
-
-function selTurno(el,t){
-  turno=t;
-  document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('sel'));
-  el.classList.add('sel');
-  validateLogin();
-}
-
-function pickSec(el,id){
-  selSec=id;
-  document.querySelectorAll('.sec-sel-opt').forEach(b=>b.classList.remove('sel'));
-  el.classList.add('sel');
-  validateLogin();
-}
-
-function validateLogin(){
-  user=document.getElementById('inp-nome').value.trim();
-  document.getElementById('btn-start').disabled=!(user&&turno);
-}
-
-function startChecklist(){
-  cid=CL[0].id;chk={};temps={};openSec={};
-  document.getElementById('nnome').textContent=user;
-  const secLabel=selSec==='__all__'?turno:CL[0].sections.find(s=>s.id===selSec)?.title||turno;
-  document.getElementById('nturno').textContent=turno+' · '+secLabel;
-  renderCL();
-  goTo('checklist');
-}
-
-// ─────────────────────────────────────────────────────────────
-// CHECKLIST RENDER
-// ─────────────────────────────────────────────────────────────
-function getActiveSecs(){
-  const all=(CL.find(c=>c.id===cid)||CL[0]).sections;
-  if(selSec==='__all__') return all;
-  return all.filter(s=>s.id===selSec);
-}
-
-function tempStatus(val,item){
-  if(val===null||val===undefined||val==='') return 'empty';
-  const n=parseFloat(val);
-  if(isNaN(n)) return 'empty';
-  if(item.max<0){
-    if(n<=item.max) return 'ok';
-    if(n<=item.max+4) return 'warn';
-    return 'danger';
-  }
-  if(n>=item.min && n<=item.max) return 'ok';
-  if(n>=item.min-3 && n<=item.max+3) return 'warn';
-  return 'danger';
-}
-function tempStatusLabel(st){
-  if(st==='ok') return '✓ Ok';
-  if(st==='warn') return '⚠ Atenção';
-  if(st==='danger') return '✕ Fora do padrão';
-  return 'Aguardando';
-}
-
-function renderCL(){
-  const secs=getActiveSecs();
-  const body=document.getElementById('chkbody');
-  body.innerHTML='';
-  secs.forEach(sec=>{
-    const {tot,don}=countSec(sec);
-    const isOpen=!!openSec[sec.id];
-    const d=document.createElement('div');d.className='sec';
-    let itemsHtml='';
-    sec.items.forEach((it,i)=>{
-      if(it.t==='temp'){
-        const key=sec.id+'-'+i;
-        const val=temps[key]||'';
-        const st=tempStatus(val,it);
-        itemsHtml+=`
-          <div class="titem" id="titem-${sec.id}-${i}">
-            <div class="titem-top">
-              <div class="titem-icon">🌡️</div>
-              <div class="titem-label ${chk[key]?'done':''}">${it.label}</div>
-            </div>
-            <div class="titem-input-row">
-              <div class="titem-input-wrap ${val?st:''}" id="tiwrap-${sec.id}-${i}">
-                <input class="titem-num" type="number" inputmode="decimal" placeholder="—" value="${val}"
-                  id="tinput-${sec.id}-${i}"
-                  onchange="setTemp('${sec.id}',${i},this.value)"
-                  oninput="setTemp('${sec.id}',${i},this.value)">
-                <span class="titem-unit">°C</span>
-              </div>
-              <span class="titem-status ${val?st:'empty'}" id="tstat-${sec.id}-${i}">${tempStatusLabel(val?st:'empty')}</span>
-            </div>
-            <div class="titem-ref" id="tref-${sec.id}-${i}">${it.ref||''}</div>
-          </div>`;
-      } else {
-        const key=sec.id+'-'+i;
-        itemsHtml+=`
-          <div class="citem" id="ci-${sec.id}-${i}" onclick="toggleItem('${sec.id}',${i})">
-            <div class="cbox ${chk[key]?'done':''}" id="cb-${sec.id}-${i}"></div>
-            <span class="ctxt ${chk[key]?'done':''}" id="ct-${sec.id}-${i}">${it.label}</span>
-          </div>`;
-      }
-    });
-    d.innerHTML=`
-      <div class="shead" onclick="toggleSec('${sec.id}')">
-        <span class="semoji">${sec.emoji}</span>
-        <div class="sinfo">
-          <div class="sname">${sec.title}</div>
-          <div class="scnt" id="cnt-${sec.id}">${don}/${tot} itens</div>
-        </div>
-        <span class="sbadge ${badgeClass(sec.turno)}">${sec.turno}</span>
-        <span class="schev ${isOpen?'open':''}" id="chev-${sec.id}">&#9658;</span>
-      </div>
-      <div class="sitems ${isOpen?'open':''}" id="si-${sec.id}">${itemsHtml}</div>`;
-    body.appendChild(d);
-    if(selSec!=='__all__'&&!openSec[sec.id]){
-      openSec[sec.id]=true;
-      d.querySelector('.sitems').classList.add('open');
-      d.querySelector('.schev').classList.add('open');
-    }
-  });
-  updateProg();
-}
-
-function countSec(sec){
-  let tot=sec.items.length,don=0;
-  sec.items.forEach((it,i)=>{if(chk[sec.id+'-'+i]) don++;});
-  return {tot,don};
-}
-
-function toggleSec(id){
-  openSec[id]=!openSec[id];
-  document.getElementById('si-'+id).classList.toggle('open',openSec[id]);
-  document.getElementById('chev-'+id).classList.toggle('open',openSec[id]);
-}
-
-function toggleItem(sid,idx){
-  const k=sid+'-'+idx;
-  chk[k]=!chk[k];
-  document.getElementById('cb-'+sid+'-'+idx).classList.toggle('done',chk[k]);
-  document.getElementById('ct-'+sid+'-'+idx).classList.toggle('done',chk[k]);
-  updateCount(sid);
-  updateProg();
-}
-
-function setTemp(sid,idx,val){
-  const k=sid+'-'+idx;
-  temps[k]=val;
-  const sec=getActiveSecs().find(s=>s.id===sid);
-  if(!sec) return;
-  const item=sec.items[idx];
-  const st=tempStatus(val,item);
-  const hasFill=val!==''&&val!==null&&val!==undefined;
-  chk[k]=hasFill;
-  const lbl=document.getElementById('titem-'+sid+'-'+idx)?.querySelector('.titem-label');
-  if(lbl) lbl.className='titem-label'+(chk[k]?' done':'');
-  const wrap=document.getElementById('tiwrap-'+sid+'-'+idx);
-  if(wrap){ wrap.className='titem-input-wrap '+(hasFill?st:''); }
-  const stEl=document.getElementById('tstat-'+sid+'-'+idx);
-  if(stEl){ stEl.className='titem-status '+(hasFill?st:'empty'); stEl.textContent=tempStatusLabel(hasFill?st:'empty'); }
-  updateCount(sid);
-  updateProg();
-  if(hasFill&&st==='danger') toast('⚠️ Temperatura fora do padrão!');
-}
-
-function updateCount(sid){
-  const sec=getActiveSecs().find(s=>s.id===sid);
-  if(!sec) return;
-  const {tot,don}=countSec(sec);
-  const el=document.getElementById('cnt-'+sid);
-  if(el) el.textContent=don+'/'+tot+' itens';
-}
-
-function updateProg(){
-  const secs=getActiveSecs();
-  let tot=0,don=0;
-  secs.forEach(s=>s.items.forEach((_,i)=>{tot++;if(chk[s.id+'-'+i])don++;}));
-  const pct=tot?Math.round(don/tot*100):0;
-  document.getElementById('ppct').textContent=pct+'%';
-  document.getElementById('pfill').style.width=pct+'%';
-  document.getElementById('plbl').textContent=don+' de '+tot+' itens';
-  document.getElementById('bfin').style.opacity=pct===100?'1':'.4';
-  document.getElementById('bwap').style.opacity=don>0?'1':'.35';
-}
-
-// ─────────────────────────────────────────────────────────────
-// WA MESSAGE
-// ─────────────────────────────────────────────────────────────
-function buildMsg(){
-  const secs=getActiveSecs();
-  let tot=0,don=0;
-  secs.forEach(s=>s.items.forEach((_,i)=>{tot++;if(chk[s.id+'-'+i])don++;}));
-  const pct=tot?Math.round(don/tot*100):0;
-  const now=new Date();
-  const hora=now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
-  const data=now.toLocaleDateString('pt-BR');
-  let m='🔥 *CHECKLIST — PRAÇA QUENTE*\n';
-  m+='━━━━━━━━━━━━━━━━━━━━\n';
-  m+=`👤 *Responsável:* ${user}\n`;
-  m+=`⏰ *Turno:* ${turno}\n`;
-  if(selSec!=='__all__'){
-    const sn=secs[0]?.title||'';
-    m+=`📋 *Seção:* ${sn}\n`;
-  }
-  m+=`📅 *Data:* ${data} às ${hora}\n`;
-  m+=`📊 *Progresso:* ${don}/${tot} itens (${pct}%)\n`;
-  m+='━━━━━━━━━━━━━━━━━━━━\n\n';
-  secs.forEach(sec=>{
-    const {tot:st,don:sd}=countSec(sec);
-    const all=sd===st;
-    m+=`${all?'✅':'🔲'} *${sec.title}*`;
-    if(!all) m+=` (${sd}/${st})`;
-    m+='\n';
-    sec.items.forEach((it,i)=>{
-      const k=sec.id+'-'+i;
-      if(it.t==='temp'){
-        const val=temps[k];
-        const hasFill=val!==''&&val!==undefined&&val!==null;
-        if(hasFill){
-          const st2=tempStatus(val,it);
-          const icon=st2==='ok'?'🌡️✅':st2==='warn'?'🌡️⚠️':'🌡️❌';
-          m+=`  ${icon} ${it.label}: *${val}°C*\n`;
-        } else {
-          m+=`  🌡️ ${it.label}: *não registrado*\n`;
-        }
-      } else if(!chk[k]){
-        m+=`  • ${it.label}\n`;
-      }
-    });
-    m+='\n';
-  });
-  m+='━━━━━━━━━━━━━━━━━━━━\n';
-  m+=pct===100?'✅ *Turno 100% concluído!*\n':`⚠️ *Pendentes: ${tot-don} ${tot-don===1?'item':'itens'}*\n`;
-  return m;
-}
-
-function shareWa(full){
-  const msg=buildMsg();
-  const num=waNum.replace(/\D/g,'');
-  const url=(num?`https://wa.me/${num}?text=`:'https://wa.me/?text=')+encodeURIComponent(msg);
-  window.open(url,'_blank');
-}
-
-function finishChecklist(){
-  const secs=getActiveSecs();
-  let tot=0,don=0;
-  secs.forEach(s=>s.items.forEach((_,i)=>{tot++;if(chk[s.id+'-'+i])don++;}));
-  const pct=Math.round(don/tot*100);
-  const msg=buildMsg();
-  hist.unshift({nome:user,turno,secao:selSec==='__all__'?'Completo':secs[0]?.title,done:don,total:tot,pct,ts:new Date().toISOString(),msg});
-  if(hist.length>100) hist=hist.slice(0,100);
-  saveHist();
-  document.getElementById('dsub').textContent=`${user} — ${turno}`;
-  document.getElementById('sdone').textContent=don;
-  document.getElementById('spct').textContent=pct+'%';
-  document.getElementById('waprev').textContent=msg;
-  goTo('done');
-}
-
-function novoTurno(){
-  document.getElementById('inp-nome').value='';
-  document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('sel'));
-  turno='';user='';selSec='__all__';
-  document.getElementById('btn-start').disabled=true;
-  goTo('login');
-}
-
-// ─────────────────────────────────────────────────────────────
-// HISTORY
-// ─────────────────────────────────────────────────────────────
-function renderHist(){
-  const body=document.getElementById('hbody');
-  document.getElementById('hcount').textContent=hist.length+' registro'+(hist.length!==1?'s':'');
-  if(!hist.length){body.innerHTML='<div class="hempty">Nenhum turno registrado ainda.</div>';return;}
-  body.innerHTML=hist.map((h,i)=>{
-    const d=new Date(h.ts);
-    const ds=d.toLocaleDateString('pt-BR')+' às '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
-    return `<div class="hitem">
-      <div class="htop"><span class="hname">${h.nome}</span><span class="hdate">${ds}</span></div>
-      <div class="hturno">${h.turno}${h.secao&&h.secao!=='Completo'?' · '+h.secao:''}</div>
-      <div class="hbrow">
-        <div class="hbtrack"><div class="hbfill" style="width:${h.pct}%"></div></div>
-        <span class="hbpct">${h.pct}%</span>
-        <span class="hitext">${h.done}/${h.total}</span>
-      </div>
-      <button class="hwabtn" onclick="shareHistWa(${i})">
-        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.477 2 2 6.477 2 12c0 1.821.487 3.53 1.338 5L2 22l5.14-1.323A9.969 9.969 0 0012 22c5.523 0 10-4.477 10-10S17.522 2 12 2zm0 18a8 8 0 01-4.091-1.124l-.291-.174-3.032.78.807-2.944-.19-.302A8 8 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z"/></svg>
-        Reenviar pelo WhatsApp
-      </button>
-    </div>`;
-  }).join('');
-}
-
-function shareHistWa(idx){
-  const h=hist[idx];if(!h) return;
-  const msg=h.msg||`${h.nome} — ${h.turno}: ${h.pct}% (${h.done}/${h.total})`;
-  const num=waNum.replace(/\D/g,'');
-  window.open((num?`https://wa.me/${num}?text=`:'https://wa.me/?text=')+encodeURIComponent(msg),'_blank');
-}
-
-function clearHistory(){if(!confirm('Limpar todo o histórico?')) return;hist=[];saveHist();renderHist();}
-
-// ─────────────────────────────────────────────────────────────
-// ADMIN
-// ─────────────────────────────────────────────────────────────
-function renderAdmin(){
-  const body=document.getElementById('abody');
-  body.innerHTML='';
-  const wdiv=document.createElement('div');wdiv.className='acfg';
-  wdiv.innerHTML=`<h3>📱 WhatsApp para receber relatórios</h3>
-    <p>Se configurado, os relatórios serão enviados direto para este número. Deixe em branco para o funcionário escolher.</p>
-    <div class="warow">
-      <input type="tel" id="inp-wanum" placeholder="5511999998888" value="${waNum}">
-      <button class="bsavewa" onclick="saveWaNum()">Salvar</button>
-    </div>
-    <p style="font-size:11px;color:var(--muted);margin-top:6px">Código do país + DDD + número. Ex: 5511999998888</p>`;
-  body.appendChild(wdiv);
-  const tip=document.createElement('div');
-  tip.style.cssText='background:var(--bll);border-radius:var(--rsm);padding:10px 12px;margin-bottom:10px;font-size:12px;color:var(--bl);line-height:1.5';
-  tip.innerHTML='💡 <strong>Dica:</strong> itens com 🌡️ são campos de temperatura digitável. Para adicionar um, escreva o nome do item normalmente — o tipo pode ser alterado para "temp" usando o botão ao lado de cada item.';
-  body.appendChild(tip);
-
-  AD.forEach((cl,ci)=>{
-    const wrap=document.createElement('div');wrap.className='achkwrap';
-    let h=`<input class="achkname" value="${cl.name}" onchange="AD[${ci}].name=this.value" placeholder="Nome do checklist">`;
-    cl.sections.forEach((sec,si)=>{
-      h+=`<div class="asec">
-        <div class="asecrow">
-          <input class="aemoji" value="${sec.emoji}" maxlength="2" onchange="AD[${ci}].sections[${si}].emoji=this.value">
-          <input class="atitle" value="${sec.title}" onchange="AD[${ci}].sections[${si}].title=this.value" placeholder="Nome da seção">
-          <select class="aturno" onchange="AD[${ci}].sections[${si}].turno=this.value">
-            ${['Manhã','Tarde','Encerramento'].map(t=>`<option ${sec.turno===t?'selected':''}>${t}</option>`).join('')}
-          </select>
-          <button class="bdel" onclick="delSec(${ci},${si})">✕</button>
-        </div>
-        <div id="ai-${ci}-${si}">
-          ${sec.items.map((it,ii)=>`
-            <div class="airow">
-              <span class="anum">${ii+1}.</span>
-              <input value="${it.label||it}" onchange="AD[${ci}].sections[${si}].items[${ii}].label=this.value" placeholder="Item">
-              <span class="atype ${it.t==='temp'?'temp':'norm'}" title="${it.t==='temp'?'Campo de temperatura':'Checkbox normal'}" style="cursor:pointer" onclick="toggleItemType(${ci},${si},${ii})">${it.t==='temp'?'🌡️ temp':'☑ check'}</span>
-              <button class="aidel" onclick="delItem(${ci},${si},${ii})">✕</button>
-            </div>`).join('')}
-        </div>
-        <button class="baddi" onclick="addItem(${ci},${si})">+ Adicionar item</button>
-      </div>`;
-    });
-    h+=`<button class="badds" onclick="addSec(${ci})">+ Nova seção</button>`;
-    wrap.innerHTML=h;body.appendChild(wrap);
-  });
-}
-
-function saveWaNum(){waNum=document.getElementById('inp-wanum').value.trim();localStorage.setItem('cl_wa',waNum);toast('Número salvo! ✓');}
-function toggleItemType(ci,si,ii){
-  const it=AD[ci].sections[si].items[ii];
-  it.t=it.t==='temp'?'check':'temp';
-  if(it.t==='temp'&&!it.ref) it.ref='';
-  if(it.t==='temp'&&it.min===undefined){it.min=0;it.max=10;}
-  renderAdmin();
-}
-function delSec(ci,si){if(!confirm('Remover esta seção?')) return;AD[ci].sections.splice(si,1);renderAdmin();}
-function delItem(ci,si,ii){AD[ci].sections[si].items.splice(ii,1);renderAdmin();}
-function addItem(ci,si){
-  AD[ci].sections[si].items.push({t:'check',label:'Novo item'});renderAdmin();
-  setTimeout(()=>{
-    const c=document.getElementById(`ai-${ci}-${si}`);
-    if(c){const ins=c.querySelectorAll('input');const l=ins[ins.length-1];if(l){l.focus();l.select();}}
-  },50);
-}
-function addSec(ci){
-  AD[ci].sections.push({id:'s'+Date.now(),turno:'Manhã',emoji:'📋',title:'Nova seção',items:[{t:'check',label:'Primeiro item'}]});
-  renderAdmin();
-}
-function saveAdmin(){CL=JSON.parse(JSON.stringify(AD));saveLS();buildTurnoGrid();buildSecSel();toast('Salvo com sucesso! ✓');setTimeout(()=>goTo('login'),1200);}
-function resetDefault(){if(!confirm('Restaurar checklist padrão?')) return;AD=JSON.parse(JSON.stringify(DEFAULT));renderAdmin();toast('Padrão restaurado');}
-
-// ─────────────────────────────────────────────────────────────
-// INIT
-// ─────────────────────────────────────────────────────────────
-buildTurnoGrid();
-buildSecSel();
+const DEFAULT_SECTIONS=[
+{id:'sec_abertura_1',name:'Geladeira',icon:'🧊',tab:'abertura',order:0},
+{id:'sec_abertura_2',name:'Freezer',icon:'❄️',tab:'abertura',order:1},
+{id:'sec_abertura_3',name:'Limpeza',icon:'🧹',tab:'abertura',order:2},
+{id:'sec_mep_1',name:'Ingredientes Básicos',icon:'🥄',tab:'mep',order:0},
+{id:'sec_mep_2',name:'Condimentos',icon:'🌶️',tab:'mep',order:1},
+{id:'sec_operacao_1',name:'Equipamentos',icon:'🔧',tab:'operacao',order:0},
+{id:'sec_fechamento_1',name:'Limpeza Final',icon:'✨',tab:'fechamento',order:0}
+];
+const DEFAULT_ITEMS=[
+{id:'item_001',text:'Verificar geladeira',sec:'sec_abertura_1',type:'temperature',order:0},
+{id:'item_002',text:'Checar validade produtos',sec:'sec_abertura_1',type:'default',order:1},
+{id:'item_003',text:'Limpar prateleiras',sec:'sec_abertura_1',type:'default',order:2},
+{id:'item_004',text:'Verificar freezer',sec:'sec_abertura_2',type:'temperature',order:0},
+{id:'item_005',text:'Organizar alimentos',sec:'sec_abertura_2',type:'default',order:1},
+{id:'item_006',text:'Limpar chão',sec:'sec_abertura_3',type:'default',order:0},
+{id:'item_007',text:'Limpar bancadas',sec:'sec_abertura_3',type:'default',order:1},
+{id:'item_008',text:'Repor óleo',sec:'sec_mep_1',type:'default',order:0},
+{id:'item_009',text:'Contar sal',sec:'sec_mep_1',type:'default',order:1},
+{id:'item_010',text:'Verificar farinha',sec:'sec_mep_1',type:'default',order:2},
+{id:'item_011',text:'Repor sal',sec:'sec_mep_2',type:'default',order:0},
+{id:'item_012',text:'Verificar pimenta',sec:'sec_mep_2',type:'default',order:1},
+{id:'item_013',text:'Checar fogão',sec:'sec_operacao_1',type:'temperature',order:0},
+{id:'item_014',text:'Testar fritadeira',sec:'sec_operacao_1',type:'temperature',order:1},
+{id:'item_015',text:'Verificar gás',sec:'sec_operacao_1',type:'default',order:2},
+{id:'item_016',text:'Limpar cozinha',sec:'sec_fechamento_1',type:'default',order:0},
+{id:'item_017',text:'Guardar equipamentos',sec:'sec_fechamento_1',type:'default',order:1}
+];
+function buildDefaultSchedule(){const s={};for(let d=0;d<7;d++)s[d]=['sec_abertura_1','sec_abertura_2','sec_abertura_3','sec_mep_1','sec_mep_2','sec_operacao_1','sec_fechamento_1'];return s}
+const K_SECTIONS='pq_sections';const K_ITEMS='pq_items';const K_SCHEDULE='pq_schedule';const K_STATE=d=>'pq_state_'+d;const K_PHOTOS=d=>'pq_photos_'+d;const K_WHATSAPP='pq_whatsapp_config';
+function getSections(){const s=localStorage.getItem(K_SECTIONS);return s?JSON.parse(s):JSON.parse(JSON.stringify(DEFAULT_SECTIONS))}
+function getItems(){const s=localStorage.getItem(K_ITEMS);return s?JSON.parse(s):JSON.parse(JSON.stringify(DEFAULT_ITEMS))}
+function getSchedule(){const s=localStorage.getItem(K_SCHEDULE);return s?JSON.parse(s):buildDefaultSchedule()}
+function getPhotos(date){const s=localStorage.getItem(K_PHOTOS(date));return s?JSON.parse(s):[]}
+function saveSections(data){localStorage.setItem(K_SECTIONS,JSON.stringify(data))}
+function saveItems(data){localStorage.setItem(K_ITEMS,JSON.stringify(data))}
+function saveSchedule(data){localStorage.setItem(K_SCHEDULE,JSON.stringify(data))}
+function savePhotos(date,data){localStorage.setItem(K_PHOTOS(date),JSON.stringify(data))}
+function getState(date){const s=localStorage.getItem(K_STATE(date));return s?JSON.parse(s):{responsavel:'',checks:{},obs:{}}}
+function putState(date,state){localStorage.setItem(K_STATE(date),JSON.stringify(state))}
+function getWhatsappConfig(){const cfg=localStorage.getItem(K_WHATSAPP);return cfg?JSON.parse(cfg):{phone:'',groupName:''}}
+function saveWhatsappConfig(cfg){localStorage.setItem(K_WHATSAPP,JSON.stringify(cfg))}
+let currentDate='';let currentTab='abertura';let dayState={responsavel:'',checks:{},obs:{}};let photos=[];
+document.addEventListener('DOMContentLoaded',()=>{const today=new Date();const y=today.getFullYear();const m=String(today.getMonth()+1).padStart(2,'0');const d=String(today.getDate()).padStart(2,'0');currentDate=`${y}-${m}-${d}`;document.getElementById('dateInput').value=currentDate;dayState=getState(currentDate);photos=getPhotos(currentDate);document.getElementById('resp').value=dayState.responsavel||'';renderAllPanels();updateProgress();renderPhotos();renderAdmin();if('serviceWorker'in navigator&&window.location.protocol==='https:'){navigator.serviceWorker.register('service-worker.js').then(r=>console.log('SW registered')).catch(e=>console.log('SW error:',e))}});
+function onDateChange(){saveState();savePhotos(currentDate,photos);currentDate=document.getElementById('dateInput').value;dayState=getState(currentDate);photos=getPhotos(currentDate);document.getElementById('resp').value=dayState.responsavel||'';renderAllPanels();updateProgress();renderPhotos()}
+function saveState(){dayState.responsavel=document.getElementById('resp').value;document.querySelectorAll('.item[data-id]').forEach(el=>{const id=el.dataset.id;const checked=el.classList.contains('checked');const tempEl=el.querySelector('.temp-input');const noteEl=el.querySelector('.temp-note');if(!dayState.checks[id])dayState.checks[id]={};dayState.checks[id].checked=checked;if(tempEl)dayState.checks[id].temp=tempEl.value;if(noteEl)dayState.checks[id].note=noteEl.value});document.querySelectorAll('textarea[data-obs]').forEach(el=>{dayState.obs[el.dataset.obs]=el.value});putState(currentDate,dayState);updateProgress()}
+function openPhotoInput(){document.getElementById('photoInput').click()}
+function addPhoto(e){const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=evt=>{if(photos.length<10){photos.push(evt.target.result);savePhotos(currentDate,photos);renderPhotos()}else{alert('Máx 10 fotos/dia')}};reader.readAsDataURL(file);document.getElementById('photoInput').value=''}
+function deletePhoto(idx){photos.splice(idx,1);savePhotos(currentDate,photos);renderPhotos()}
+function renderPhotos(){const panel=document.getElementById('photosPanel');const container=document.getElementById('photosContainer');const count=document.getElementById('photoCount');const shareBtn=document.getElementById('sharePhotosBtn');if(photos.length===0){panel.style.display='none';shareBtn.style.display='none';return}panel.style.display='block';shareBtn.style.display='block';count.textContent=photos.length;container.innerHTML=photos.map((p,i)=>`<div class="photo-item"><img src="${p}" onclick="viewPhoto(${i})"><button class="photo-del" onclick="deletePhoto(${i})">✕</button></div>`).join('')}
+function viewPhoto(idx){const img=new Image();img.src=photos[idx];const w=window.open('');w.document.write(img.outerHTML)}
+const TABS=['abertura','mep','operacao','fechamento'];const TAB_LABELS={abertura:'Abertura',mep:'MEP',operacao:'Operação',fechamento:'Fechamento'};
+function renderAllPanels(){const sections=getSections();const items=getItems();const schedule=getSchedule();const dow=new Date(currentDate+'T12:00:00').getDay();const activeSecs=schedule[dow]||[];TABS.forEach(tab=>{const panel=document.getElementById('panel-'+tab);let html=`<div class="all-done" id="alldone-${tab}">✅ ${TAB_LABELS[tab]} completo!</div>`;if(tab==='mep'){html+=`<div class="rules-banner"><strong>🔁 MEP é contínua</strong> — se acabou um produto, repor imediatamente.</div>`}const tabSecs=sections.filter(s=>s.tab===tab&&activeSecs.includes(s.id)).sort((a,b)=>a.order-b.order);if(tabSecs.length===0){html+=`<div class="empty-day"><div class="ed-icon">📅</div>Nenhuma seção agendada para este dia.</div>`}else{tabSecs.forEach(sec=>{const secItems=items.filter(i=>i.sec===sec.id).sort((a,b)=>a.order-b.order);html+=renderSection(sec,secItems)})}html+=`<div class="obs-card"><label>📝 Observações</label><textarea data-obs="${tab}" placeholder="Registre pendências..." oninput="saveState()">${dayState.obs[tab]||''}</textarea></div>`;panel.innerHTML=html});updateProgress()}
+function renderSection(sec,items){let html=`<div class="section"><div class="sec-hdr" onclick="toggleSec(this)"><span>${sec.icon} ${sec.name}</span><span class="sc"><span id="sc_${sec.id}">0/${items.length}</span> <span class="chev">▼</span></span></div><div class="item-list">`;items.forEach(item=>{const st=dayState.checks[item.id]||{};const isChecked=st.checked?'checked':'';html+=`<div class="item ${isChecked}" data-id="${item.id}" data-type="${item.type}" onclick="toggleItem(this)"><div class="chk"><svg viewBox="0 0 12 10" fill="none" width="12" height="10"><polyline points="1,5 4.5,9 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-body"><div class="item-text">${esc(item.text)}</div>`;if(item.type==='temperature'){const tempVal=st.temp||'';const noteVal=st.note||'';html+=`<div class="temp-row" onclick="stopProp(event)"><label>🌡️ Temp:</label><input class="temp-input" type="number" step="0.1" placeholder="ex: 4.0" value="${esc(tempVal)}" oninput="saveState()"><span class="temp-unit">°C</span><textarea class="temp-note" placeholder="Obs (opcional)" oninput="saveState()">${esc(noteVal)}</textarea></div>`}html+=`</div></div>`});html+=`</div></div>`;return html}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function toggleItem(el){el.classList.toggle('checked');saveState();updateProgress()}
+function stopProp(e){e.stopPropagation()}
+function toggleSec(hdr){const list=hdr.nextElementSibling;hdr.classList.toggle('collapsed');list.classList.toggle('hidden')}
+function updateProgress(){const sections=getSections();const items=getItems();const schedule=getSchedule();const dow=new Date(currentDate+'T12:00:00').getDay();const activeSecs=schedule[dow]||[];let grandTotal=0,grandDone=0;TABS.forEach(tab=>{const tabSecs=sections.filter(s=>s.tab===tab&&activeSecs.includes(s.id));const tabItems=items.filter(i=>tabSecs.some(s=>s.id===i.sec));const done=tabItems.filter(i=>{const el=document.querySelector(`.item[data-id="${i.id}"]`);return el?el.classList.contains('checked'):dayState.checks[i.id]&&dayState.checks[i.id].checked}).length;const total=tabItems.length;grandTotal+=total;grandDone+=done;const badge=document.getElementById('badge-'+tab);if(badge)badge.textContent=`${done}/${total}`;const allDone=document.getElementById('alldone-'+tab);if(allDone)allDone.style.display=total>0&&done===total?'block':'none';tabSecs.forEach(sec=>{const secItems=items.filter(i=>i.sec===sec.id);const sdone=secItems.filter(i=>{const el=document.querySelector(`.item[data-id="${i.id}"]`);return el?el.classList.contains('checked'):dayState.checks[i.id]&&dayState.checks[i.id].checked}).length;const scEl=document.getElementById('sc_'+sec.id);if(scEl)scEl.textContent=`${sdone}/${secItems.length}`})});const pct=grandTotal>0?grandDone/grandTotal*100:0;document.getElementById('pb').style.width=pct.toFixed(0)+'%';document.getElementById('pl').textContent=`${grandDone} de ${grandTotal} itens (${pct.toFixed(0)}%)`}
+function showTab(name){currentTab=name;document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));const panel=document.getElementById('panel-'+name);const btn=document.getElementById('tab-'+name);if(panel)panel.classList.add('active');if(btn)btn.classList.add('active');const wa=document.querySelector('.btn-wa');if(wa)wa.style.display=name==='admin'?'none':''}
+function resetDay(){if(!confirm(`Limpar todos os itens de ${fmtDate(currentDate)}?`))return;const resp=document.getElementById('resp').value;dayState={responsavel:resp,checks:{},obs:{}};photos=[];putState(currentDate,dayState);savePhotos(currentDate,photos);renderAllPanels();updateProgress();renderPhotos()}
+function fmtDate(d){if(!d)return'';const[y,m,dd]=d.split('-');return`${dd}/${m}/${y}`}
+const DAYS=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+function showAdminTab(name){document.querySelectorAll('.ast-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.admin-content').forEach(c=>c.classList.remove('open'));document.getElementById('ast-'+name).classList.add('active');document.getElementById('admin-'+name).classList.add('open');if(name==='config'){loadPhoneNumber()}}
+function renderAdmin(){renderAgenda();renderItemEditor()}
+function renderAgenda(){const sections=getSections();const schedule=getSchedule();const todayDow=new Date().getDay();let html=`<div class="agenda-card"><div class="agenda-card-title">Seções ativas por dia</div>`;for(let d=0;d<7;d++){const isToday=d===todayDow;html+=`<div class="day-row ${isToday?'today-row':''}"><span class="day-name">${DAYS[d]}${isToday?' •':''}</span><div class="day-chips">`;sections.forEach(sec=>{const on=(schedule[d]||[]).includes(sec.id);html+=`<span class="sec-chip ${on?'on':'off'}" onclick="toggleSchedule(${d},'${sec.id}',this)">${sec.icon}</span>`});html+=`</div></div>`}html+=`</div>`;document.getElementById('admin-agenda').innerHTML=html}
+function toggleSchedule(dow,secId,chipEl){const schedule=getSchedule();const arr=schedule[dow]||[];const idx=arr.indexOf(secId);if(idx>=0)arr.splice(idx,1);else arr.push(secId);schedule[dow]=arr;saveSchedule(schedule);chipEl.classList.toggle('on');chipEl.classList.toggle('off');const todayDow=new Date(currentDate+'T12:00:00').getDay();if(dow===todayDow){renderAllPanels()}}
+function renderItemEditor(){const sections=getSections();const items=getItems();const tabColors={abertura:'tag-abertura',mep:'tag-mep',operacao:'tag-operacao',fechamento:'tag-fechamento'};const tabNames={abertura:'Abertura',mep:'MEP',operacao:'Operação',fechamento:'Fechamento'};let html=`<div class="add-sec-card"><h4>➕ Nova Seção</h4><div class="add-sec-form"><div class="add-sec-row"><input type="text" id="newSecIcon" placeholder="Ícone" style="max-width:80px"><input type="text" id="newSecName" placeholder="Nome"></div><div class="add-sec-row"><select id="newSecTab"><option>Abertura</option><option>MEP</option><option>Operação</option><option>Fechamento</option></select></div><button class="btn-add-sec" onclick="addSection()">Criar</button></div></div>`;sections.sort((a,b)=>a.order-b.order).forEach(sec=>{const secItems=items.filter(i=>i.sec===sec.id).sort((a,b)=>a.order-b.order);const tagClass=tabColors[sec.tab]||'';html+=`<div class="sec-ed-card"><div class="sec-ed-hdr collapsed" onclick="toggleSecEd(this)"><span class="sec-ed-icon">${sec.icon}</span><span class="sec-ed-name">${esc(sec.name)}</span><span class="sec-ed-tag ${tagClass}">${tabNames[sec.tab]||sec.tab}</span><button class="btn-del-sec" onclick="deleteSection(event,'${sec.id}')">🗑️</button><span class="sec-ed-chev">▼</span></div><div class="sec-ed-body">`;secItems.forEach(item=>{html+=`<div class="edit-item-row"><span class="edit-item-text">${esc(item.text)}</span>${item.type==='temperature'?'<span class="temp-badge">🌡️</span>':''}<button class="btn-icon" onclick="openEditModal('${item.id}')">✏️</button><button class="btn-icon" onclick="deleteItem('${item.id}')">🗑️</button></div>`});html+=`<div class="add-item-area"><div class="add-item-form"><input class="add-item-input" type="text" id="newItem_${sec.id}" placeholder="Novo item..." onkeydown="if(event.key==='Enter')addItem('${sec.id}')"><button class="btn-add-item" onclick="addItem('${sec.id}')">+ Add</button></div><label class="add-item-opts"><input type="checkbox" id="newItemTemp_${sec.id}"> 🌡️ Temperatura</label></div>`;html+=`</div></div>`});document.getElementById('admin-itens').innerHTML=html}
+function toggleSecEd(hdr){const body=hdr.nextElementSibling;hdr.classList.toggle('collapsed');body.classList.toggle('open')}
+function addSection(){const icon=document.getElementById('newSecIcon').value.trim()||'📌';const name=document.getElementById('newSecName').value.trim();const tabName=document.getElementById('newSecTab').value.toLowerCase();if(!name)return;const sections=getSections();const id='sec_'+Date.now();sections.push({id,name,icon,tab:tabName,order:sections.length});saveSections(sections);const schedule=getSchedule();for(let d=0;d<7;d++){if(!schedule[d])schedule[d]=[];schedule[d].push(id)}saveSchedule(schedule);document.getElementById('newSecIcon').value='';document.getElementById('newSecName').value='';renderAdmin();renderAllPanels()}
+function deleteSection(event,secId){event.stopPropagation();const sections=getSections();const sec=sections.find(s=>s.id===secId);if(!confirm(`Excluir seção "${sec?.name}"?`))return;const newSections=sections.filter(s=>s.id!==secId);const newItems=getItems().filter(i=>i.sec!==secId);saveSections(newSections);saveItems(newItems);const schedule=getSchedule();for(let d=0;d<7;d++){if(schedule[d])schedule[d]=schedule[d].filter(id=>id!==secId)}saveSchedule(schedule);renderAdmin();renderAllPanels()}
+function addItem(secId){const input=document.getElementById('newItem_'+secId);const text=input.value.trim();if(!text)return;const isTemp=document.getElementById('newItemTemp_'+secId).checked;const items=getItems();const secItems=items.filter(i=>i.sec===secId);items.push({id:'item_'+Date.now(),text,sec:secId,type:isTemp?'temperature':'default',order:secItems.length});saveItems(items);input.value='';document.getElementById('newItemTemp_'+secId).checked=false;renderAdmin();renderAllPanels()}
+function deleteItem(itemId){const items=getItems();const item=items.find(i=>i.id===itemId);if(!confirm(`Excluir "${item?.text}"?`))return;saveItems(items.filter(i=>i.id!==itemId));if(dayState.checks[itemId]){delete dayState.checks[itemId];saveState()}renderAdmin();renderAllPanels()}
+let _editingItemId=null;
+function openEditModal(itemId){const items=getItems();const item=items.find(i=>i.id===itemId);if(!item)return;_editingItemId=itemId;document.getElementById('modalTitle').textContent='Editar item';document.getElementById('modalText').value=item.text;document.getElementById('modalIsTemp').checked=item.type==='temperature';document.getElementById('modalOverlay').classList.add('open')}
+function closeModal(){_editingItemId=null;document.getElementById('modalOverlay').classList.remove('open')}
+function saveModalItem(){const text=document.getElementById('modalText').value.trim();const isTemp=document.getElementById('modalIsTemp').checked;if(!text||!_editingItemId){closeModal();return}const items=getItems();const item=items.find(i=>i.id===_editingItemId);if(item){item.text=text;item.type=isTemp?'temperature':'default'}saveItems(items);closeModal();renderAdmin();renderAllPanels()}
+document.getElementById('modalOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('modalOverlay'))closeModal()});
+function sendWhatsapp(){saveState();const resp=document.getElementById('resp').value.trim()||'Não informado';const sections=getSections();const items=getItems();const schedule=getSchedule();const dow=new Date(currentDate+'T12:00:00').getDay();const activeSecs=schedule[dow]||[];let msg=`🔥 *CHECKLIST PRAÇA QUENTE*\n`;msg+=`━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;msg+=`👤 *Responsável:* ${resp}\n`;msg+=`📅 *Data:* ${fmtDate(currentDate)}\n`;if(photos.length>0)msg+=`📸 *Fotos anexadas:* ${photos.length}\n`;msg+=`━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;const tabNames={abertura:'🔆 ABERTURA',mep:'🍳 MEP',operacao:'🍽️ OPERAÇÃO',fechamento:'🔒 FECHAMENTO'};let overallOk=true;TABS.forEach(tab=>{const tabSecs=sections.filter(s=>s.tab===tab&&activeSecs.includes(s.id));const tabItems=items.filter(i=>tabSecs.some(s=>s.id===i.sec));if(tabItems.length===0)return;const done=tabItems.filter(i=>dayState.checks[i.id]?.checked).length;const total=tabItems.length;const pct=Math.round(done/total*100);const status=done===total?'✅':done===0?'❌':'⚠️';if(done<total)overallOk=false;msg+=`${status} *${tabNames[tab]}* (${done}/${total} - ${pct}%)\n`;tabItems.forEach(item=>{const isChecked=dayState.checks[item.id]?.checked;const icon=isChecked?'✅':'❌';const st=dayState.checks[item.id]||{};msg+=`${icon} ${item.text}`;if(isChecked&&item.type==='temperature'&&st.temp){msg+=` 🌡️ ${st.temp}°C`;if(st.note)msg+=` (${st.note})`}msg+='\n'});const obs=dayState.obs[tab];if(obs&&obs.trim()){msg+=`📌 _${obs.trim()}_\n`}msg+='\n'});msg+=`━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;msg+=overallOk?'🏆 *TURNO 100% CONCLUÍDO!*':'⚠️ *ATENÇÃO: HÁ ITENS PENDENTES*';const cfg=getWhatsappConfig();const phone=cfg.phone.trim();const url=phone?`https://wa.me/${phone}?text=`:`https://wa.me/?text=`;window.open(url+encodeURIComponent(msg),'_blank')}
+function sharePhotos(){if(photos.length===0){alert('Nenhuma foto para compartilhar');return}if(!navigator.share){alert('Seu navegador não suporta compartilhamento. Abra no WhatsApp manualmente.');return}const filesToShare=[];async function prepareShare(){try{for(let i=0;i<Math.min(photos.length,5);i++){const response=await fetch(photos[i]);const blob=await response.blob();const file=new File([blob],`foto_${i+1}.jpg`,{type:'image/jpeg'});filesToShare.push(file)}if(navigator.share){await navigator.share({title:'Fotos - Praça Quente',text:`Fotos do checklist de ${fmtDate(currentDate)}`,files:filesToShare})}else{alert('Compartilhamento não disponível')}}catch(err){console.error('Erro ao compartilhar:',err);alert('Erro ao preparar fotos para compartilhamento')}}prepareShare()}
+function savePhoneNumber(){const phone=document.getElementById('waPhone').value.trim();const groupName=document.getElementById('waGroup').value.trim();if(!phone){alert('Adicione um número de WhatsApp válido');return}saveWhatsappConfig({phone,groupName});alert('✅ Configuração salva!')}
+function loadPhoneNumber(){const cfg=getWhatsappConfig();document.getElementById('waPhone').value=cfg.phone||'';document.getElementById('waGroup').value=cfg.groupName||''}
+if('serviceWorker'in navigator&&window.location.protocol==='https:'){navigator.serviceWorker.register('service-worker.js').catch(e=>console.log('SW error:',e))}
 </script>
 </body>
 </html>
+```
+
+---
+
+## 🎯 PASSO 4: No GitHub Web
+
+1. **Selecione todo o código acima** (Ctrl+A)
+2. **Copie** (Ctrl+C)
+3. **Vá para GitHub:** https://github.com/SEU_USUARIO/checklist-praca-quente
+4. **Clique em `checklist-praca-quente.html`**
+5. **Clique no ✏️ (editar)**
+6. **Apague tudo** que tiver lá (Ctrl+A → Delete)
+7. **Cole o código novo** (Ctrl+V)
+8. **Desça até "Commit changes"**
+9. **Escreva:**
+```
+feat: Melhorar relatório com ícones ✅❌ para cada item
