@@ -1,71 +1,85 @@
 const CACHE_NAME = 'praca-quente-v1';
-const urlsToCache = [
+const URLS_TO_CACHE = [
   '/',
-  '/index.html',
-  '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png'
+  '/checklist-praca-quente.html',
+  '/manifest.json'
 ];
-
-// Instalação - cacheia os arquivos principais
+ 
+// INSTALL - cache files
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('Cache aberto');
-        return cache.addAll(urlsToCache);
-      })
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(URLS_TO_CACHE).catch(() => {
+        // Se falhar, tudo bem - o app funciona sem cache em algumas situações
+        return cache.add(URLS_TO_CACHE[1]).catch(() => true);
+      });
+    })
   );
+  self.skipWaiting();
 });
-
-// Ativação - limpa caches antigos
+ 
+// ACTIVATE - clean old caches
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
           if (cacheName !== CACHE_NAME) {
-            console.log('Removendo cache antigo:', cacheName);
             return caches.delete(cacheName);
           }
         })
       );
     })
   );
+  self.clients.claim();
 });
-
-// Fetch - serve do cache quando offline
+ 
+// FETCH - serve from cache, fallback to network
 self.addEventListener('fetch', event => {
+  // Skip non-GET requests
+  if (event.request.method !== 'GET') {
+    return;
+  }
+ 
   event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Cache hit - retorna a resposta do cache
-        if (response) {
+    caches.match(event.request).then(response => {
+      // Cache hit - return response
+      if (response) {
+        return response;
+      }
+ 
+      return fetch(event.request).then(response => {
+        // Check if valid response
+        if (!response || response.status !== 200 || response.type === 'error') {
           return response;
         }
-
-        // Clone do request
-        const fetchRequest = event.request.clone();
-
-        return fetch(fetchRequest).then(response => {
-          // Verifica se recebeu uma resposta válida
-          if (!response || response.status !== 200 || response.type !== 'basic') {
-            return response;
-          }
-
-          // Clone da resposta
-          const responseToCache = response.clone();
-
-          caches.open(CACHE_NAME)
-            .then(cache => {
-              cache.put(event.request, responseToCache);
-            });
-
-          return response;
-        }).catch(() => {
-          // Se falhar (offline), retorna página de erro ou fallback
-          return caches.match('/index.html');
-        });
-      })
+ 
+        // Clone the response
+        const responseToCache = response.clone();
+ 
+        // Cache it for future use (but don't cache everything)
+        const shouldCache = event.request.url.includes(self.location.origin);
+        if (shouldCache) {
+          caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, responseToCache);
+          });
+        }
+ 
+        return response;
+      }).catch(() => {
+        // Offline fallback
+        if (event.request.destination === 'document') {
+          return caches.match('/checklist-praca-quente.html');
+        }
+      });
+    })
   );
 });
+ 
+// Background sync for photos (future enhancement)
+self.addEventListener('sync', event => {
+  if (event.tag === 'sync-photos') {
+    // Placeholder for future photo sync
+  }
+});
+ 
