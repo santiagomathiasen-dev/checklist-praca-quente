@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Praça Quente - Instruções de Publicação</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(135deg,#16a865 0%,#0d7a49 100%);min-height:100vh;padding:2rem}
+.container{max-width:900px;margin:0 auto;background:#fff;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,.2);overflow:hidden}
+.header{background:#16a865;color:#fff;padding:3rem 2rem;text-align:center}
+.header h1{font-size:2.5rem;margin-bottom:.5rem}
+.header .emoji{font-size:4rem;margin-bottom:1rem}
+.header p{font-size:1.1rem;opacity:.9}
+.content{padding:2rem}
+.step{background:#f5f4f0;border-left:4px solid #16a865;padding:1.5rem;margin-bottom:1.5rem;border-radius:8px}
+.step h2{color:#16a865;margin-bottom:1rem;font-size:1.3rem}
+.step-number{display:inline-block;background:#16a865;color:#fff;width:32px;height:32px;border-radius:50%;text-align:center;line-height:32px;font-weight:bold;margin-right:10px}
+.files{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin:1.5rem 0}
+.file{background:#fff;border:2px solid #e5e3db;border-radius:10px;padding:1rem;text-align:center;transition:all .3s}
+.file:hover{border-color:#16a865;transform:translateY(-2px);box-shadow:0 4px 12px rgba(22,168,101,.2)}
+.file-icon{font-size:2.5rem;margin-bottom:.5rem}
+.file-name{font-weight:600;color:#18180f;margin-bottom:.3rem}
+.file-desc{font-size:.85rem;color:#7d7c74}
+.alert{background:#fff3cd;border-left:4px solid #ffc107;padding:1rem;margin:1.5rem 0;border-radius:6px}
+.alert strong{color:#856404}
+.btn{display:inline-block;background:#16a865;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;margin:.5rem;transition:background .3s}
+.btn:hover{background:#0d7a49}
+.btn-secondary{background:#2563d4}
+.btn-secondary:hover{background:#1e4db7}
+.footer{background:#f5f4f0;padding:2rem;text-align:center;color:#7d7c74}
+.checklist{background:#e6f7f0;border:1px solid #16a865;border-radius:8px;padding:1.5rem;margin:1.5rem 0}
+.checklist h3{color:#16a865;margin-bottom:1rem}
+.checklist label{display:block;margin:.5rem 0;cursor:pointer}
+.checklist input[type="checkbox"]{margin-right:8px;width:18px;height:18px;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="emoji">🔥</div>
+    <h1>Praça Quente</h1>
+    <p>Sistema de Checklist PWA - Pronto para Publicar!</p>
+  </div>
+
+  <div class="content">
+    <div class="alert">
+      <strong>⚠️ ATENÇÃO:</strong> Antes de publicar, você DEVE alterar a senha do admin no arquivo <code>index.html</code> (procure por <code>ADMIN_PASSWORD</code>)
+    </div>
+
+    <h2 style="text-align:center;margin:2rem 0;color:#16a865">📦 Arquivos do Projeto</h2>
+    
+    <div class="files">
+      <div class="file">
+        <div class="file-icon">📄</div>
+        <div class="file-name">index.html</div>
+        <div class="file-desc">Aplicativo principal</div>
+      </div>
+      <div class="file">
+        <div class="file-icon">⚙️</div>
+        <div class="file-name">manifest.json</div>
+        <div class="file-desc">Configuração PWA</div>
+      </div>
+      <div class="file">
+        <div class="file-icon">🔧</div>
+        <div class="file-name">service-worker.js</div>
+        <div class="file-desc">Funcionalidade offline</div>
+      </div>
+      <div class="file">
+        <div class="file-icon">🎨</div>
+        <div class="file-name">gerar-icones.html</div>
+        <div class="file-desc">Gerador de ícones</div>
+      </div>
+      <div class="file">
+        <div class="file-icon">📖</div>
+        <div class="file-name">README.md</div>
+        <div class="file-desc">Documentação completa</div>
+      </div>
+      <div class="file">
+        <div class="file-icon">🚀</div>
+        <div class="file-name">GUIA-RAPIDO.md</div>
+        <div class="file-desc">Tutorial rápido</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <h2><span class="step-number">1</span> Gerar Ícones</h2>
+      <p>Abra o arquivo <strong>gerar-icones.html</strong> no navegador e baixe os 2 ícones.</p>
+      <a href="gerar-icones.html" class="btn" target="_blank">🎨 Abrir Gerador de Ícones</a>
+    </div>
+
+    <div class="step">
+      <h2><span class="step-number">2</span> Alterar Senha</h2>
+      <p>Edite o arquivo <strong>index.html</strong> e procure por:</p>
+      <code style="background:#fff;padding:8px;display:block;margin:10px 0;border-radius:4px">const ADMIN_PASSWORD='praca2025';</code>
+      <p>Troque <code>praca2025</code> pela sua senha desejada.</p>
+    </div>
+
+    <div class="step">
+      <h2><span class="step-number">3</span> Escolher Plataforma</h2>
+      <p>Escolha onde você quer publicar (todas são GRATUITAS):</p>
+      <div style="margin-top:1rem">
+        <a href="https://github.com" class="btn" target="_blank">🐙 GitHub Pages</a>
+        <a href="https://app.netlify.com/drop" class="btn btn-secondary" target="_blank">🌐 Netlify</a>
+        <a href="https://vercel.com" class="btn" target="_blank">▲ Vercel</a>
+      </div>
+    </div>
+
+    <div class="step">
+      <h2><span class="step-number">4</span> Fazer Upload</h2>
+      <p>Envie TODOS os arquivos para a plataforma escolhida:</p>
+      <ul style="margin:1rem 0 1rem 2rem;line-height:1.8">
+        <li>index.html</li>
+        <li>manifest.json</li>
+        <li>service-worker.js</li>
+        <li>icon-192.png (gerado no passo 1)</li>
+        <li>icon-512.png (gerado no passo 1)</li>
+      </ul>
+    </div>
+
+    <div class="checklist">
+      <h3>✅ Checklist Final</h3>
+      <label><input type="checkbox"> Ícones gerados (icon-192.png e icon-512.png)</label>
+      <label><input type="checkbox"> Senha do admin alterada</label>
+      <label><input type="checkbox"> Todos os 5 arquivos enviados para o servidor</label>
+      <label><input type="checkbox"> Site abre corretamente no navegador</label>
+      <label><input type="checkbox"> Testado no celular</label>
+      <label><input type="checkbox"> App instalável (aparece opção "Adicionar à tela inicial")</label>
+    </div>
+
+    <div class="step">
+      <h2><span class="step-number">5</span> Compartilhar</h2>
+      <p>Depois de publicar, compartilhe o link com sua equipe:</p>
+      <div style="background:#f5f4f0;padding:1rem;margin:1rem 0;border-radius:6px;font-family:monospace;font-size:.9rem">
+"🔥 <strong>Praça Quente - Checklist Digital</strong><br><br>
+Use nosso novo sistema:<br>
+👉 [SEU-LINK-AQUI]<br><br>
+<strong>Como instalar:</strong><br>
+1. Abra o link no celular<br>
+2. Menu > "Adicionar à tela inicial"<br>
+3. Use como um app!"
+      </div>
+    </div>
+
+    <div class="alert" style="background:#e6f7f0;border-color:#16a865">
+      <strong>💡 Dica:</strong> Leia o arquivo <strong>GUIA-RAPIDO.md</strong> para instruções passo a passo detalhadas!
+    </div>
+  </div>
+
+  <div class="footer">
+    <p><strong>🔥 Praça Quente</strong></p>
+    <p style="margin-top:.5rem">Sistema profissional de checklist para cozinhas industriais</p>
+    <p style="margin-top:1rem;font-size:.85rem">Desenvolvido com foco em segurança alimentar e qualidade</p>
+  </div>
+</div>
+</body>
+</html>
